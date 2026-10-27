@@ -22,7 +22,8 @@ const submitForm = () => panel.element.querySelector("form").dispatchEvent(new E
 describe("search button", () => {
     it("is a button on the map, closed at first", () => {
         make();
-        expect(panel.element.className).toContain("maplibregl-ctrl-group");
+        expect(panel.element.classList.contains("maplibregl-ctrl")).toBe(true);
+        expect(panel.element.className).toContain("theme-secondary theme-color-primary");
         expect(button().title).toBe("Search for an address or coordinates");
         expect(button().getAttribute("aria-expanded")).toBe("false");
         expect(panelEl().hidden).toBe(true);
@@ -212,6 +213,7 @@ describe("suggestions", () => {
         expect(items()[0].classList.contains("active")).toBe(true);
         key("ArrowUp");
         expect(items()[1].classList.contains("active")).toBe(true);
+        expect(items().map(i => i.classList.contains("theme-background-highlight"))).toEqual([false, true]);
         expect(key("Enter").defaultPrevented).toBe(true);
         expect(picked).toEqual([PARIS]);
         expect(calls.search).toEqual([]);

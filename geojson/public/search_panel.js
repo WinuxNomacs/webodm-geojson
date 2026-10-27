@@ -9,7 +9,7 @@
     // Returns {element, setLoading(bool), setError(message), open(), close(), isOpen()}
     function createSearchPanel(doc, opts) {
         var element = doc.createElement("div");
-        element.className = "gj-search-control maplibregl-ctrl maplibregl-ctrl-group";
+        element.className = "gj-search-control gj-ctrl-group theme-secondary theme-color-primary maplibregl-ctrl";
 
         var button = doc.createElement("button");
         button.type = "button";
@@ -21,14 +21,14 @@
         element.appendChild(button);
 
         var panel = doc.createElement("div");
-        panel.className = "gj-search-panel";
+        panel.className = "gj-search-panel theme-secondary theme-color-primary";
         panel.hidden = true;
         element.appendChild(panel);
 
         var form = doc.createElement("form");
         var input = doc.createElement("input");
         input.type = "text";
-        input.className = "gj-search-input";
+        input.className = "gj-search-input form-control input-sm";
         input.placeholder = "Address or latitude, longitude";
         input.autocomplete = "off";
         input.setAttribute("role", "combobox");
@@ -38,19 +38,19 @@
 
         var submit = doc.createElement("button");
         submit.type = "submit";
-        submit.className = "gj-search-submit";
+        submit.className = "gj-search-submit btn btn-default btn-sm";
         submit.innerHTML = '<i class="fa fa-search"></i>';
         form.appendChild(submit);
         panel.appendChild(form);
 
         var list = doc.createElement("ul");
-        list.className = "gj-search-list";
+        list.className = "gj-search-list theme-border";
         list.setAttribute("role", "listbox");
         list.hidden = true;
         panel.appendChild(list);
 
         var error = doc.createElement("div");
-        error.className = "gj-search-error";
+        error.className = "gj-search-error theme-color-button-danger";
         error.hidden = true;
         panel.appendChild(error);
 
@@ -64,7 +64,7 @@
             list.innerHTML = "";
             shown.forEach(function (s, i) {
                 var item = doc.createElement("li");
-                item.className = "gj-search-item";
+                item.className = "gj-search-item theme-background-highlight-hover";
                 item.setAttribute("role", "option");
                 var label = doc.createElement("span");
                 label.className = "gj-search-label";
@@ -72,7 +72,7 @@
                 item.appendChild(label);
                 if (s.detail) {
                     var detail = doc.createElement("span");
-                    detail.className = "gj-search-detail";
+                    detail.className = "gj-search-detail text-muted";
                     detail.textContent = s.detail;
                     item.appendChild(detail);
                 }
@@ -89,6 +89,7 @@
             active = i;
             Array.prototype.forEach.call(list.children, function (item, j) {
                 item.classList.toggle("active", j === i);
+                item.classList.toggle("theme-background-highlight", j === i);
                 item.setAttribute("aria-selected", String(j === i));
             });
         }

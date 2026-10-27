@@ -2,57 +2,59 @@
 #gj-editor .gj-layout{ height: calc(100vh - 140px); min-height: 480px; }
 .gj-layout{ display: flex; height: 100%; }
 .gj-layout .gj-panel{ width: 330px; flex: none; overflow-y: auto; padding: 0 14px 14px 0; }
-.gj-layout .gj-map{ flex: 1; min-width: 0; border: 1px solid #ccc; }
+.gj-layout .gj-map{ flex: 1; min-width: 0; border: 1px solid; }
 .gj-layout h3{ margin: 0; font-size: 18px; }
 /* Sticky within .gj-panel, so Save stays reachable; its colors come from the theme (data-bar-style in editor.html) */
 .gj-layout .gj-top-bar{ display: flex; align-items: center; justify-content: space-between; gap: 8px; position: sticky; top: 0; z-index: 2; margin: 0 0 6px 0; padding: 8px 0; }
 .gj-layout .gj-actions{ white-space: nowrap; }
 .gj-layout .gj-back{ display: inline-block; font-size: 12px; }
 .gj-layout .gj-save-group{ display: flex; align-items: center; gap: 8px; }
-.gj-layout .gj-save-status{ font-size: 11px; color: #777; white-space: nowrap; }
-.gj-layout .gj-note{ color: #777; font-size: 12px; margin-bottom: 8px; }
-.gj-layout .gj-error{ color: #a94442; font-size: 12px; margin: 4px 0 8px 0; white-space: pre-line; }
-.gj-layout .gj-message{ color: #666; font-size: 12px; margin-bottom: 10px; }
-.gj-layout .gj-meta{ color: #777; font-size: 12px; margin-bottom: 6px; }
+.gj-layout .gj-save-status{ font-size: 11px; white-space: nowrap; }
+.gj-layout .gj-note{ font-size: 12px; margin-bottom: 8px; }
+.gj-layout .gj-error{ font-size: 12px; margin: 4px 0 8px 0; white-space: pre-line; }
+.gj-layout .gj-message{ font-size: 12px; margin-bottom: 10px; }
+.gj-layout .gj-meta{ font-size: 12px; margin-bottom: 6px; }
 .gj-layout .form-group{ margin-bottom: 8px; }
 .gj-layout label{ display: block; font-size: 12px; margin-bottom: 2px; }
 .gj-layout label .form-control{ margin-top: 2px; font-weight: normal; }
 .gj-layout .help-block{ font-size: 11px; margin: 2px 0 0 0; }
 .gj-layout .gj-list{ margin-top: 8px; }
-.gj-layout .gj-row{ display: block; padding: 6px 8px; border-bottom: 1px solid #eee; text-decoration: none; color: inherit; }
-.gj-layout .gj-row:hover{ background: rgba(121, 141, 143, .15); }
+.gj-layout .gj-row{ display: block; padding: 6px 8px; border-bottom: 1px solid; text-decoration: none; color: inherit; }
 .gj-layout .gj-row-name{ font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.gj-layout .gj-row-meta{ font-size: 11px; color: #777; }
-.gj-layout .gj-empty{ color: #777; font-size: 12px; padding: 6px 0; }
+.gj-layout .gj-row-meta{ font-size: 11px; }
+.gj-layout .gj-empty{ font-size: 12px; padding: 6px 0; }
 .gj-layout .gj-tools{ display: flex; margin-bottom: 6px; }
 .gj-layout .gj-tools .btn{ flex: 1; padding-left: 5px; padding-right: 5px; white-space: nowrap; }
-.gj-layout .gj-tools .btn.active{ background: #798d8f; color: #fff; }
 .gj-layout .gj-use{ margin-bottom: 10px; }
 .gj-layout .gj-file-actions{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .gj-layout .gj-text{ font-family: monospace; font-size: 11px; resize: vertical; white-space: pre; }
 .gj-layout [hidden]{ display: none !important; }
 
 .gj-layout .gj-layers-control, .gj-layout .gj-search-control{ position: relative; }
-.gj-layout .gj-layers-button, .gj-layout .gj-search-button{ width: 29px; height: 29px; color: #333; }  /* the theme's text color may be light */
-.gj-layout .gj-layers-panel, .gj-layout .gj-search-panel{ position: absolute; top: 0; right: 36px; z-index: 5; min-width: 190px; padding: 8px 10px; background: #fff; border-radius: 4px;
-  box-shadow: 0 0 0 2px rgba(0,0,0,.1); font-size: 12px; text-align: left; color: #333; }
+/* The map's buttons (zoom, layers, search): MapLibre's look in the theme's colors (theme-secondary and theme-color-primary
+   on the group, theme-border between buttons); without .gj-layout, so that theme-background-highlight-hover wins */
+.gj-ctrl-group{ border-radius: 4px; box-shadow: 0 0 0 2px rgba(0,0,0,.1); }
+.gj-ctrl-group button{ display: block; width: 29px; height: 29px; padding: 0; border: 0; border-radius: 4px; background-color: transparent; color: inherit; cursor: pointer; }
+.gj-ctrl-group button + button{ border-top: 1px solid; border-radius: 0 0 4px 4px; }
+.gj-ctrl-group button:first-child:not(:last-child){ border-radius: 4px 4px 0 0; }
+.gj-layout .gj-layers-panel, .gj-layout .gj-search-panel{ position: absolute; top: 0; right: 36px; z-index: 5; min-width: 190px; padding: 8px 10px; border-radius: 4px;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.1); font-size: 12px; text-align: left; }
 .gj-layout .gj-search-panel{ min-width: 220px; }
-.gj-layout .gj-layers-heading{ font-weight: bold; color: #555; margin: 0 0 2px 0; }
+.gj-layout .gj-layers-heading{ font-weight: bold; margin: 0 0 2px 0; }
 .gj-layout .gj-layers-choice{ display: block; margin: 2px 0; font-weight: normal; cursor: pointer; white-space: nowrap; }
 .gj-layout .gj-layers-choice input{ margin-right: 4px; vertical-align: middle; }
 .gj-layout .gj-search-panel form{ display: flex; gap: 4px; }
-.gj-layout .gj-search-input{ flex: 1; min-width: 0; font-size: 12px; padding: 3px 6px; border: 1px solid #ccc; border-radius: 3px; background: #fff; color: #333; }
-.gj-layout .gj-search-submit{ width: 26px; border: 1px solid #ccc; background: #f5f5f5; border-radius: 3px; cursor: pointer; }
-.gj-layout .gj-search-error{ color: #a94442; margin-top: 6px; }
+.gj-layout .gj-search-input{ flex: 1; min-width: 0; }
+.gj-layout .gj-search-submit{ flex: none; }
+.gj-layout .gj-search-error{ margin-top: 6px; }
 .gj-layout .gj-search-panel{ width: 260px; }
-.gj-layout .gj-search-list{ list-style: none; margin: 6px 0 0 0; padding: 0; border-top: 1px solid #eee; }
+.gj-layout .gj-search-list{ list-style: none; margin: 6px 0 0 0; padding: 0; border-top: 1px solid; }
 .gj-layout .gj-search-item{ padding: 4px 6px; cursor: pointer; border-radius: 3px; line-height: 1.3; }
-.gj-layout .gj-search-item:hover, .gj-layout .gj-search-item.active{ background: #eef3f8; }
 .gj-layout .gj-search-label{ display: block; font-weight: bold; }
-.gj-layout .gj-search-detail{ display: block; color: #777; font-size: 11px; }
+.gj-layout .gj-search-detail{ display: block; font-size: 11px; }
 
 .gj-layout .gj-dialog{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, .4); display: flex; align-items: center; justify-content: center; z-index: 1050; }
-.gj-layout .gj-dialog-inner{ background: #fff; color: #333; border-radius: 4px; padding: 20px; width: 340px; max-width: 90vw; box-shadow: 0 2px 10px rgba(0, 0, 0, .3); }
+.gj-layout .gj-dialog-inner{ border-radius: 4px; padding: 20px; width: 340px; max-width: 90vw; box-shadow: 0 2px 10px rgba(0, 0, 0, .3); }
 .gj-layout .gj-dialog-inner h4{ margin-top: 0; }
 @media (max-width: 800px){
   #gj-editor .gj-layout{ height: auto; }
@@ -69,4 +71,3 @@
 .gj-task-dialog-header{ display: flex; align-items: center; justify-content: space-between; flex: none; margin-bottom: 8px; }
 .gj-task-dialog-header h4{ margin: 0; }
 .gj-task-dialog-body{ flex: 1; min-height: 0; }
-.gj-task-dialog-loading{ color: #777; }
