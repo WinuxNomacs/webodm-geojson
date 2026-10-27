@@ -22,7 +22,6 @@
             style: {version: 8, sources: {}, layers: []},          // the basemap is added below, from the project's list
             center: (lastView && lastView.center) || [0, 20], zoom: (lastView && lastView.zoom) || 2
         });
-        map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
         map.addControl(new maplibregl.ScaleControl({unit: "metric"}), "bottom-left");
         map.on("moveend", function () {
             store(storage, VIEW_KEY, JSON.stringify({center: map.getCenter().toArray(), zoom: map.getZoom()}));
@@ -48,9 +47,26 @@
                 if (chosen) applyBasemap(chosen);
             }
         });
+        function zoomButtons() {
+            var element = ctx.doc.createElement("div");
+            element.className = "gj-ctrl-group theme-secondary theme-color-primary maplibregl-ctrl";
+            [["Zoom in", "fa-plus", function () { map.zoomIn(); }], ["Zoom out", "fa-minus", function () { map.zoomOut(); }]].forEach(function (b) {
+                var button = ctx.doc.createElement("button");
+                button.type = "button";
+                button.className = "theme-border";
+                button.title = b[0];
+                button.setAttribute("aria-label", b[0]);
+                button.innerHTML = '<i class="fa ' + b[1] + '"></i>';
+                button.addEventListener("click", b[2]);
+                element.appendChild(button);
+            });
+            return element;
+        }
         function control(element) {
             return {onAdd: function () { return element; }, onRemove: function () { if (element.parentNode) element.parentNode.removeChild(element); }};
         }
+        // Zoom buttons of our own rather than MapLibre's, whose icons are images that cannot take the theme's colors
+        map.addControl(control(zoomButtons()), "top-right");
         map.addControl(control(layersPanel.element), "top-right");
 
         // An address (suggested by Photon as one types, or geocoded via Nominatim on Enter) or "latitude, longitude"

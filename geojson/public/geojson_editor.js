@@ -19,21 +19,21 @@
                     '<input type="file" data-gj="import-file" accept=".geojson,.json,application/geo+json,application/json" hidden>' +
                   "</div>" +
                 "</div>" +
-                '<p class="gj-note">Areas to process: in Bounds &amp; Cropping, ODM crops the results to a polygon\'s outline. ' +
+                '<p class="gj-note text-muted">Areas to process: in Bounds &amp; Cropping, ODM crops the results to a polygon\'s outline. ' +
                   "Start a file with New, by importing one, or by drawing on the map.</p>" +
                 '<input type="search" class="form-control input-sm" data-gj="search" placeholder="Search by name or owner" aria-label="Search the library">' +
-                '<div class="gj-error" data-gj="library-error" hidden></div>' +
+                '<div class="gj-error theme-color-button-danger" data-gj="library-error" hidden></div>' +
                 '<div class="gj-list" data-gj="list"></div>' +
               "</section>" +
               '<section data-gj="file-view" hidden>' +
                 bar + '<a href="javascript:void(0);" class="gj-back" data-gj="back"><i class="fa fa-arrow-left"></i> Library</a>' +
-                  '<div class="gj-save-group"><span class="gj-save-status" data-gj="status"></span>' +
+                  '<div class="gj-save-group"><span class="gj-save-status text-muted" data-gj="status"></span>' +
                     '<button type="button" class="btn btn-primary btn-sm" data-gj="save" disabled><i class="fa fa-save"></i> Save</button></div>' +
                 "</div>" +
                 '<div class="form-group"><label>Name<input type="text" class="form-control input-sm" data-gj="name" autocomplete="off"></label></div>' +
-                '<div class="gj-meta" data-gj="meta"></div>' +
-                '<div class="gj-note" data-gj="owner-note" hidden></div>' +
-                '<div class="gj-error" data-gj="file-error" hidden></div>' +
+                '<div class="gj-meta text-muted" data-gj="meta"></div>' +
+                '<div class="gj-note text-muted" data-gj="owner-note" hidden></div>' +
+                '<div class="gj-error theme-color-button-danger" data-gj="file-error" hidden></div>' +
                 '<div class="gj-tools btn-group btn-group-sm">' +
                   '<button type="button" class="btn btn-default" data-tool="polygon" title="Click the corners. Double-click to finish"><i class="fa fa-draw-polygon"></i> Polygon</button>' +
                   '<button type="button" class="btn btn-default" data-tool="rectangle" title="Drag over the area"><i class="fa fa-vector-square"></i> Rectangle</button>' +
@@ -49,16 +49,16 @@
                   '<button type="button" class="btn btn-default btn-sm" data-gj="delete"><i class="fa fa-trash"></i> Delete</button>' +
                 "</div>" +
                 '<label class="gj-text-label">GeoJSON<textarea class="form-control gj-text" data-gj="text" rows="14" spellcheck="false"></textarea></label>' +
-                '<div class="gj-error" data-gj="text-error" hidden></div>' +
+                '<div class="gj-error theme-color-button-danger" data-gj="text-error" hidden></div>' +
                 '<p class="help-block">One polygon without holes, in longitude and latitude. Change it here or on the map: each follows the other.</p>' +
               "</section>" +
             "</aside>" +
-            '<div class="gj-map" data-gj="map"></div>' +
+            '<div class="gj-map theme-border" data-gj="map"></div>' +
             '<div class="gj-dialog" data-gj="copy-dialog" hidden>' +
-              '<form class="gj-dialog-inner" data-gj="copy-form">' +
+              '<form class="gj-dialog-inner theme-secondary" data-gj="copy-form">' +
                 "<h4>Save a copy</h4>" +
                 '<div class="form-group"><label>Name of the copy<input type="text" class="form-control" data-gj="copy-name" autocomplete="off"></label></div>' +
-                '<div class="gj-error" data-gj="copy-error" hidden></div>' +
+                '<div class="gj-error theme-color-button-danger" data-gj="copy-error" hidden></div>' +
                 '<div class="text-right"><button type="button" class="btn btn-default" data-gj="copy-cancel">Cancel</button> ' +
                   '<button type="submit" class="btn btn-primary" data-gj="copy-submit">Save copy</button></div>' +
               "</form>" +
@@ -69,9 +69,9 @@
     // A row of the library: name, then owner, area and when it was last changed
     function fileRow(f) {
         var meta = [f.owner ? escapeHtml(f.owner) : "<em>deleted user</em>", Core.formatArea(f.area), escapeHtml(Core.formatDate(f.updated_at))];
-        return '<a href="javascript:void(0);" class="gj-row" data-id="' + f.id + '">' +
+        return '<a href="javascript:void(0);" class="gj-row theme-border theme-background-highlight-hover" data-id="' + f.id + '">' +
                '<div class="gj-row-name">' + escapeHtml(f.name) + "</div>" +
-               '<div class="gj-row-meta">' + meta.join(" &middot; ") + "</div></a>";
+               '<div class="gj-row-meta text-muted">' + meta.join(" &middot; ") + "</div></a>";
     }
 
     // ctx: {doc, win, root, fetchFn, api, csrf, basemaps, barStyle, hash (keep the open file in the URL), confirmFn,
@@ -132,6 +132,7 @@
                 (ring ? "The polygon has " + ring.length + " corners. Use Edit to move them, or to drag the polygon."
                       : "Draw the boundary on the map with Polygon or Rectangle, or paste its GeoJSON below.");
             els["shape-message"].classList.toggle("gj-error", !!shapeError);
+            els["shape-message"].classList.toggle("theme-color-button-danger", !!shapeError);
         }
 
         function writeText() {
@@ -166,7 +167,13 @@
                 refresh();
             },
             onTool: function (name) {
-                [].forEach.call(container.querySelectorAll("[data-tool]"), function (b) { b.classList.toggle("active", b.getAttribute("data-tool") === name); });
+                [].forEach.call(container.querySelectorAll("[data-tool]"), function (b) {
+                    // The theme's colors: the active tool is a primary button
+                    var active = b.getAttribute("data-tool") === name;
+                    b.classList.toggle("active", active);
+                    b.classList.toggle("btn-primary", active);
+                    b.classList.toggle("btn-default", !active);
+                });
             }
         });
 
@@ -189,8 +196,8 @@
         function renderList() {
             var query = els.search.value, shown = Core.filterFiles(files, query);
             if (shown.length) els.list.innerHTML = shown.map(fileRow).join("");
-            else if (files.length) els.list.innerHTML = '<p class="gj-empty">No file matches “' + escapeHtml(query.trim()) + "”.</p>";
-            else els.list.innerHTML = '<p class="gj-empty">The library is empty.</p>';
+            else if (files.length) els.list.innerHTML = '<p class="gj-empty text-muted">No file matches “' + escapeHtml(query.trim()) + "”.</p>";
+            else els.list.innerHTML = '<p class="gj-empty text-muted">The library is empty.</p>';
         }
 
         function showLibrary() {

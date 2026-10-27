@@ -223,6 +223,7 @@ describe("drawing and the text", () => {
         map.opts.onShape(polygon([[0, 0], [1, 1], [2, 2]]));
         expect($("shape-message").textContent).toBe("The polygon has no area: its corners are on one line");
         expect($("shape-message").classList.contains("gj-error")).toBe(true);
+        expect($("shape-message").classList.contains("theme-color-button-danger")).toBe(true);
         expect($("save").disabled).toBe(true);
     });
 
@@ -258,12 +259,14 @@ describe("drawing and the text", () => {
         expect(map.tool).toBe("polygon");
     });
 
-    it("the tool buttons choose the map's tool", async () => {
+    it("the tool buttons choose the map's tool, and the active one is a primary button in the theme's colors", async () => {
         await make();
         editor.newFile();
         click(tool("rectangle"));
         expect(map.tool).toBe("rectangle");
         expect(Array.from(host.querySelectorAll("[data-tool].active")).map(b => b.getAttribute("data-tool"))).toEqual(["rectangle"]);
+        expect(Array.from(host.querySelectorAll("[data-tool].btn-primary")).map(b => b.getAttribute("data-tool"))).toEqual(["rectangle"]);
+        expect(tool("polygon").classList.contains("btn-default")).toBe(true);
     });
 });
 
