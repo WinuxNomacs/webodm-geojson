@@ -1,1 +1,53 @@
-# webodm-geojson
+# GeoJSON plugin for WebODM
+
+Draw, import and save polygons for the `boundary` option of a task (Bounds & Cropping), in a library shared by
+everyone on the WebODM instance. ODM crops a task's results to the boundary's outline.
+
+A port of [LuxODM](https://github.com/WinuxNomacs/LuxODM)'s GeoJSON plugin to the official WebODM plugin API.
+
+## What it does
+
+- **A GeoJSON tab** in WebODM's menu opens the library: every saved boundary on the instance, with its owner,
+  area and when it was last changed, searchable by name or owner.
+- **An editor for one polygon**, on a map with the instance's basemaps (Administration > Basemaps):
+  - draw a polygon or a rectangle, move it or its corners;
+  - import a `.geojson` file, or edit the GeoJSON text beside the map (each follows the other);
+  - search for an address or a place, with suggestions as you type, or go to "latitude, longitude".
+- **Checked as ODM reads it:** one polygon without holes, in longitude and latitude (WGS 84). A file ODM cannot
+  use is refused with the reason. Its area is shown in m², ha or km².
+- **Shared, with owners:** everyone can see, use, download and copy every file; only its owner and admins can
+  rename, change or delete it. Names are unique on the instance, whatever the case.
+
+To use a boundary in a task, download it from the library and load it with the import button of the task's
+`boundary` option (Task Options > Edit). Buttons beside that option, as LuxODM has, need a hook WebODM does not
+have yet; they are planned once it does.
+
+## Requirements
+
+WebODM 3.3.2 or later.
+
+## Installing
+
+- From WebODM's plugin directory (Administration > Plugins), once it is listed there; or
+- download `geojson-<version>.zip` from this repository's
+  [releases](https://github.com/WinuxNomacs/webodm-geojson/releases) and upload it in Administration > Plugins.
+
+WebODM installs the map libraries (MapLibre, terra-draw) with npm when it loads the plugin.
+
+## Data and outside services
+
+- The library is stored in WebODM's database, in the plugin's data store (Administration > Plugin Datum shows
+  it). Removing the plugin does not remove it.
+- The browser loads map tiles from the instance's basemaps (OpenStreetMap when there are none), and asks
+  [Photon](https://photon.komoot.io) for suggestions and
+  [Nominatim](https://nominatim.openstreetmap.org) for a search, only when someone types in the map's search.
+  The map's last basemap is remembered in the browser.
+
+## Development
+
+The dev environment (WebODM in Docker with the plugin mounted), the tests and the release steps are in
+[CLAUDE.md](CLAUDE.md); the plans are in [upcoming-changes.md](upcoming-changes.md).
+
+## License
+
+[GNU Affero General Public License v3.0](LICENSE).
