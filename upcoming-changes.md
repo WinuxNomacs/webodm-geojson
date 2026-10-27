@@ -3,18 +3,21 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(2026-10-27: the release and the upstream hook, requested in chat, planned the same day)
-1. **Release 1.0.0 as it is** (planned 2026-10-27, decisions under Release). (Release)
-
-**Then**
-2. **A pull request to WebODM: Task Options extensions for any plugin, new and existing tasks** (designed
-   2026-10-27; to plan after the release, and best after asking WebODM's developers). (Task Options hook)
+(2026-10-27: the user's order: the WebODM pull request ready to publish, then the plugin's controls on it; the
+user opens the PR on GitHub and contacts WebODM's developers once it is ready)
+1. **A pull request to WebODM: Task Options extensions for any plugin, new and existing tasks** (designed
+   2026-10-27; to plan in detail). (Task Options hook, phase A)
+2. **The GeoJSON controls back in the Task Options, on that hook** (1.1.0; to plan). (Task Options hook, phase B)
 
 **Later**
-- **The Task Options buttons ("Create GeoJSON", "Use existing")** in this plugin: once WebODM has the hook (Then,
-  2). (Port, Task Options hook)
+(nothing yet)
 
 **Done**
+- **Release 1.0.0** — 2026-10-27. `README.md`, `CHANGELOG.md`, `experimental: false`, `dev/package.sh` (the zip
+  and its sha256), the `release-check` skill. The zip was installed through WebODM's plugin upload with its
+  sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it. Published
+  by the user: the repo made public, tag v1.0.0, the zip on its GitHub release, the `directory.json` entry.
+  (Release)
 - **Port phase 1: the plugin and its library on official WebODM** — 2026-10-27. `geojson/` (`library.py` keeps
   the library in the global data store under a lock; `api.py`, `boundary.py`, `plugin.py`, `public/`,
   `templates/` from LuxODM), version 1.0.0. Tests: `geojson/tests/test_geojson.py` (29), `public/__tests__/` (94
@@ -140,10 +143,11 @@
       hooks, the guard and error boundary, WebODM's Jest tests, and a live check on the dev server (which runs
       that checkout) for a new and an existing task, with no plugin, and with a small example plugin using each
       hook (kept out of the PR: it shows the docs' examples work). Then the docs change. Nothing pushed: the user forks, pushes and opens the PRs.
-    - **B: the buttons in this plugin** (1.1.0), on the hook as merged upstream.
-  - **Open decisions** (when it is planned): ask WebODM's developers first (Discord #devtalk or an issue, with
-    this design), or open the PR and let it be the question? Proposed: ask first: a general API is theirs to
-    shape, and they may want other names or places (e.g. the New Task panel as well as the dialog).
+    - **B: the controls in this plugin** (1.1.0), built and checked against the phase A branch, released once
+      the hook is in a WebODM release (the feature detection keeps 1.1.0 working without it).
+  - **Decided (the user, 2026-10-27):** build the pull request to a ready-to-publish state first, with this
+    plugin's controls working on it (phase B on the PR branch, feature-detected); the user then opens the PR on
+    GitHub and reaches out to WebODM's developers soon after.
 
 ## Port
 
