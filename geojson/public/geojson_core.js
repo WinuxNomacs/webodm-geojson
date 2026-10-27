@@ -217,8 +217,10 @@
     var OSM = {type: "tms", label: "OpenStreetMap", url: "//tile.openstreetmap.org/{z}/{x}/{y}.png", minzoom: 0, maxzoom: 19,
                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'};
 
-    function withProtocol(url, protocol) {
-        return url.indexOf("//") === 0 ? (protocol || "https:") + url : url;
+    // URLs that start with // get https: even on an http page: MapLibre fetches tiles with CORS, and a server's
+    // redirect from http to https (OpenStreetMap's) has no CORS headers, so the tiles would not load.
+    function withHttps(url) {
+        return url.indexOf("//") === 0 ? "https:" + url : url;
     }
 
     function wmsUrl(bm, url) {
@@ -230,9 +232,8 @@
     }
 
     // A MapLibre raster source for a basemap ({type: "tms" | "wms", url, subdomains, minzoom, maxzoom, attribution, ...}).
-    // `protocol` is the page's ("http:" or "https:"), for URLs that start with //.
-    function basemapSource(bm, protocol) {
-        var url = withProtocol(bm.url || "", protocol);
+    function basemapSource(bm) {
+        var url = withHttps(bm.url || "");
         if (bm.type === "wms") url = wmsUrl(bm, url);
 
         // Leaflet's {-y}: tile rows counted from the south

@@ -170,13 +170,18 @@ describe("the library's requests", () => {
 
 describe("basemaps and coordinates (as in the mission planner)", () => {
     it("turns a basemap into a MapLibre raster source", () => {
-        const source = Core.basemapSource({type: "tms", url: "//{s}.tile.example/{z}/{x}/{-y}.png", maxzoom: 18, attribution: "Ex"}, "http:");
-        expect(source.tiles).toEqual(["http://a.tile.example/{z}/{x}/{y}.png", "http://b.tile.example/{z}/{x}/{y}.png", "http://c.tile.example/{z}/{x}/{y}.png"]);
+        const source = Core.basemapSource({type: "tms", url: "//{s}.tile.example/{z}/{x}/{-y}.png", maxzoom: 18, attribution: "Ex"});
+        expect(source.tiles).toEqual(["https://a.tile.example/{z}/{x}/{y}.png", "https://b.tile.example/{z}/{x}/{y}.png", "https://c.tile.example/{z}/{x}/{y}.png"]);
         expect(source.scheme).toBe("tms");
         expect(source.maxzoom).toBe(18);
         expect(source.attribution).toBe("Ex");
         expect(Core.basemapSource({type: "wms", url: "https://wms.example/ows", layers: "ortho"}).tiles[0])
             .toContain("https://wms.example/ows?service=WMS&request=GetMap&version=1.1.1&layers=ortho");
+    });
+
+    it("loads tiles of URLs without a scheme over https, also on an http page, and keeps http URLs as they are", () => {
+        expect(Core.basemapSource(Core.OSM).tiles).toEqual(["https://tile.openstreetmap.org/{z}/{x}/{y}.png"]);
+        expect(Core.basemapSource({type: "tms", url: "http://tiles.example/{z}/{x}/{y}.png"}).tiles).toEqual(["http://tiles.example/{z}/{x}/{y}.png"]);
     });
 
     it("chooses the remembered basemap, else the default, else the first, else OpenStreetMap", () => {
