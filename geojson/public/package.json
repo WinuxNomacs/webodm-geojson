@@ -1,0 +1,11 @@
+{
+  "name": "geojson",
+  "version": "0.1.0",
+  "description": "Libraries of the GeoJSON editor page",
+  "private": true,
+  "dependencies": {
+    "maplibre-gl": "5.24.0",
+    "terra-draw": "1.35.0",
+    "terra-draw-maplibre-gl-adapter": "1.4.1"
+  }
+}

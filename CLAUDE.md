@@ -34,7 +34,7 @@ on one machine. Keep it short; edit in place.
 
 The `test` and `live-check` skills in `.claude/skills` have the steps.
 
-- Django: `docker exec -w /webodm gj-webapp python manage.py test --noinput coreplugins.geojson.tests`. One run
+- Django: `docker exec -w /webodm gj-webapp python manage.py test --noinput coreplugins.geojson.tests.test_geojson`. One run
   at a time: every run uses the same test database.
 - Jest: `npm test` at the repo root (jsdom). ESLint: `npm run lint -- geojson` (the scripts in `public/` are ES5).
 - Ruff: `.venv/bin/ruff check .`
