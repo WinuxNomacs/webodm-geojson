@@ -15,8 +15,8 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
 **Done**
 - **Release 1.0.0** — 2026-10-27. `README.md`, `CHANGELOG.md`, `experimental: false`, `dev/package.sh` (the zip
   and its sha256), the `release-check` skill. The zip was installed through WebODM's plugin upload with its
-  sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it. Published
-  by the user: the repo made public, tag v1.0.0, the zip on its GitHub release, the `directory.json` entry.
+  sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it. To publish
+  (the user): the repo made public, tag v1.0.0, the zip on its GitHub release, the `directory.json` entry.
   (Release)
 - **Port phase 1: the plugin and its library on official WebODM** — 2026-10-27. `geojson/` (`library.py` keeps
   the library in the global data store under a lock; `api.py`, `boundary.py`, `plugin.py`, `public/`,
