@@ -15,6 +15,8 @@ on one machine. Keep it short; edit in place.
 - **Python 3.9 and Django 2.2** (WebODM 3.3.2): Ruff targets py39.
 - **Never push and never tag.** Nothing is published by a push yet (no CI); a release is a zip at a public URL
   plus an entry in WebODM-Plugins' `directory.json`, both done by the user.
+- **`README.md` is the plugin's public page** (the repo is public from the 1.0.0 release): every feature change
+  updates it on the same branch (what the plugin does, installing, using it, the outside services it calls).
 - Planned in `upcoming-changes.md`; new requests arrive in `new.md` (untracked).
 
 ## Dev environment

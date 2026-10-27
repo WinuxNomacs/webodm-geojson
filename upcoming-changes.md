@@ -4,11 +4,11 @@
 
 **Up next**
 (2026-10-27: the release and the upstream hook, requested in chat, planned the same day)
-1. **Release 1.0.0 as it is** (to confirm: the decisions under Release). (Release)
+1. **Release 1.0.0 as it is** (planned 2026-10-27, decisions under Release). (Release)
 
 **Then**
-2. **A pull request to WebODM for Task Option buttons from plugins** (evaluated; to plan after the release, and
-   best after asking WebODM's developers). (Task Options hook)
+2. **A pull request to WebODM: Task Options extensions for any plugin** (a general design, 2026-10-27; to plan
+   after the release, and best after asking WebODM's developers). (Task Options hook)
 
 **Later**
 - **The Task Options buttons ("Create GeoJSON", "Use existing")** in this plugin: once WebODM has the hook (Then,
@@ -43,60 +43,84 @@
       using it, the outside services the browser calls (map tiles from the instance's basemaps, Photon for
       suggestions, Nominatim for a search), development (pointing to `CLAUDE.md`), the license.
     - `CHANGELOG.md`: 1.0.0, the port of LuxODM's plugin 0.3.0, and what is left out (the Task Options buttons).
-    - Manifest: `experimental` (WebODM only shows it as a badge in its plugin browser).
+    - Manifest: `experimental` set to `false` (it is `true` since the skeleton; WebODM only shows it as a badge in
+      its plugin browser).
     - **Release check** (a skill, `release-check`): the tests; then on the dev server, unmount `geojson/`
       (an empty folder in its place), upload the zip with its sha256 in Administration > Plugins, check that
       npm installed the libraries, run the live check on the installed copy, remove the plugin and remount.
     - Merge into `main`. The user then makes the zip public (a release of v1.0.0, tagged by the user) and opens
       the pull request to WebODM-Plugins with the `url` and `sha256` the script printed.
-  - **Open decisions:**
-    - Where the zip is public: this repo is private, and the directory needs a public URL. Proposed: make this
-      repo public at release and attach the zip to its v1.0.0 GitHub release (as the directory's other entries
-      do); `CLAUDE.md` and the plan are already written to be public.
-    - `experimental`: Proposed: `false`, as LuxODM had it: the plugin is complete and tested.
+  - **Decisions** (the user's, 2026-10-27):
+    - This repo is made public at release; the zip is attached to its v1.0.0 GitHub release (as the directory's
+      other entries do). The README is kept current with every feature change from now on (`CLAUDE.md`).
+    - `experimental`: `false`.
 
 ## Task Options hook
 
-- **A pull request to WebODM so Task Options load controls from installed plugins**: requested 2026-10-27 in chat
-  ("evaluate the lift needed for a pull request to WebODM's main repo so the Task Options can load controls from
-  installed plugins without impacting the Task Options at all when no plugin with Task Option extensions is
-  installed").
-  - **Builds on:** LuxODM's commit 1be35e8b (`Dashboard.addTaskOptionButton`): 6 files, +92/-4. Upstream
-    (`ignored/WebODM`, 3.3.2) still has the same `Dashboard.js`, `ApiFactory.js` and hook points
-    (`EditPresetDialog` renders every `ProcessingNodeOption`; `NewTaskPanel` has the map preview's `exifData`).
-  - **Evaluation (2026-10-27): a small change, about 100 lines in 5 files plus tests; the uncertainty is review,
-    not code.**
-    - **Cannot be cherry-picked:** LuxODM's `ProcessingNodeOption.jsx` already differs from upstream (an
-      `onChange` prop and a warning from LuxODM's recommendations feature), and its test relies on that
-      `onChange`. Rebuilt on upstream's file instead.
-    - **LuxODM's version does impact the options when no plugin listens:** `trigger…` in `ApiFactory` adds a
-      response listener per call that is removed only when a plugin answers; with none, each option of each
-      opened dialog (about 80) leaves one behind for the page's life. The PR checks first that a plugin
-      registered (`PluginsAPI.events.listeners("Dashboard::addTaskOptionButton").length`, `events` is already
-      exported) and otherwise does nothing: no trigger, no state change, the same markup. Plugin scripts
-      register when the page loads, before a dialog can open, so the check does not miss one.
-    - **Files:** `Dashboard.js` (the hook's name), `ProcessingNodeOption.jsx` (the guard, the buttons after the
-      input, `{option, domain, getValue, setValue, taskContext}` to the plugin), `EditPresetDialog.jsx` and
-      `EditTaskForm.jsx` (pass `taskContext`), `NewTaskPanel.jsx` (`getPhotoPositions`, which the GeoJSON
-      dialog uses to show the photos; could be left to a second PR), tests in
-      `ProcessingNodeOption.test.jsx` (buttons shown and setting the value; none and no listener left without
-      a plugin). The hook list in the plugin guide (docs.webodm.org) needs a line too, in its own repo.
-    - **WebODM's contribution rules** (`CONTRIBUTING.md`, the PR template): minimal and focused, no linter
-      changes; AI use allowed but disclosed (which AI, how much, and for new contributors how long it took);
-      the pull request opened by hand with a description in the contributor's own words; the contributor must
-      be able to explain the logic and its impact. So Claude prepares the branch, tests and notes; the user
-      reviews, writes the description and opens the PR from their fork.
-    - **This plugin afterwards:** `boundary_buttons.js` comes back, feature-detecting
-      `PluginsAPI.Dashboard.addTaskOptionButton` so the plugin keeps working (without buttons) on WebODM
-      versions without the hook; the `basemaps` endpoint returns. A minor version (1.1.0).
+- **A pull request to WebODM so the Task Options load extensions from installed plugins**: requested 2026-10-27
+  in chat ("evaluate the lift needed for a pull request to WebODM's main repo so the Task Options can load
+  controls from installed plugins without impacting the Task Options at all when no plugin with Task Option
+  extensions is installed"). The user's direction the same day: "the hook should be general as an open approach
+  for all developers to be able to use going forward when registering plugins with Task Option modifiers. The
+  design should take into account that any plugin may need to add or interact with the Task Options panel in
+  order to provide additional functionality during task setup, not just for our geojson plugin; but all
+  plugins."
+  - **Builds on:** LuxODM's commit 1be35e8b (`Dashboard.addTaskOptionButton`: buttons beside one option, 6
+    files, +92/-4), which is GeoJSON-shaped (buttons only, per option). Upstream (`ignored/WebODM`, 3.3.2):
+    - The options are edited in `EditPresetDialog`, one `ProcessingNodeOption` each; `EditTaskForm` holds the
+      task's context (`task` when editing, `getCropPolygon`, `getGcpFile`, `getFiles`, `filesCount`, the node
+      and preset) and is used both by `NewTaskPanel` and when a task is edited.
+    - Upstream's hooks hand back React components that WebODM renders with props (`addNewTaskPanelItem` gets
+      `taskInfo`, `getFiles`, `filesCount`; `addTaskActionButton` gets the task); none lets a plugin change a
+      task's options: the panel item is read-only.
+    - `ApiFactory`'s `trigger…` adds a response listener per call that is removed only when a plugin answers:
+      with no plugin listening, every call leaves one behind for the page's life.
+  - **Design (Claude's, 2026-10-27): one context, two hooks, nothing without a listener.**
+    - **The task-options context**, built once in `EditTaskForm` and passed down to the dialog, the same for
+      every hook: `{task}` (null for a new task), `node` (the processing node and its available options),
+      `getFiles()`, `filesCount`, `getCropPolygon()`, `getGcpFile()`, `getPhotoPositions()` (new in
+      `NewTaskPanel`: `[lon, lat]` of the photos the map preview read). Read-only: what a plugin changes, it
+      changes through the hooks' setters, so WebODM keeps owning the values.
+    - **`Dashboard.addTaskOptionControl(callback)`**: for each option shown, WebODM asks with `{option: {name,
+      type, domain, help, defaultValue}, context}`; a plugin answers with a React component (or a list, or
+      nothing), rendered after that option's input with the props `{option, value, setValue(value), context}`.
+      A button (as LuxODM's GeoJSON ones), a picker, a check, a hint: whatever the plugin renders.
+    - **`Dashboard.addTaskOptionsPanelItem(callback)`**: a plugin answers with a React component rendered at the
+      top of the options dialog, with `{options (name → value, as edited now), availableOptions, getOption(name),
+      setOption(name, value), setOptions({name: value}), context}`. For extensions that work across options:
+      recommendations for the photos, a helper that fills several options, a summary or a warning.
+      It is re-rendered as the options change, so a plugin needs no change event of its own.
+    - **A value a plugin sets is as if the user typed it**: the option counts as changed, a system preset turns
+      into the user's "Custom" one as it does today, and resetting to the default works as for any option.
+    - **No plugin, no change:** before triggering, each place checks that a plugin registered for that hook
+      (`PluginsAPI.events.listeners("Dashboard::<hook>").length`; `events` is already exported); otherwise it
+      triggers nothing, sets no state and renders the same markup as today. Plugin scripts register when the
+      page loads, before the dialog can open, so the check misses none.
+    - **Documented** as two new entries in the plugin guide's hook list (docs.webodm.org, its own repo), with
+      a short example each.
+  - **Lift:** about 200–250 lines in 6 files (`Dashboard.js`, `ProcessingNodeOption.jsx`, `EditPresetDialog.jsx`,
+    `EditTaskForm.jsx`, `NewTaskPanel.jsx`, a small helper for the listener check) plus Jest tests (a control
+    shown and setting its value; a panel item reading and setting several options; nothing triggered, no
+    listener left and the same render without a plugin) and the docs PR: one to two days of work with the live
+    checks. Not a cherry-pick: LuxODM's `ProcessingNodeOption.jsx` already differs from upstream's (its
+    recommendations feature), so it is built on upstream's files.
+  - **WebODM's contribution rules** (`CONTRIBUTING.md`, the PR template): minimal and focused, no linter
+    changes; AI use allowed but disclosed (which AI, how much, and for new contributors how long it took); the
+    pull request opened by hand with a description in the contributor's own words; the contributor must be
+    able to explain the logic and its impact. Claude prepares the branch, tests and notes; the user reviews,
+    writes the description and opens the PR from their fork.
+  - **This plugin afterwards:** "Create GeoJSON" and "Use existing" come back as an `addTaskOptionControl` for the
+    `boundary` option, feature-detected so the plugin still works (without them) on WebODM without the hook;
+    the `basemaps` endpoint returns. A minor version (1.1.0).
   - **Proposed phases:**
-    - **A: the WebODM branch**, in `ignored/WebODM` on a branch from upstream master: the change, WebODM's Jest
-      tests for it, a live check on the dev server (which runs that checkout) with and without a listening
-      plugin. Nothing pushed; the user forks, pushes and opens the PR.
-    - **B: the buttons in this plugin** (1.1.0), once the hook is merged upstream.
-  - **Open decisions** (when it is planned): ask WebODM's developers first (Discord #devtalk or an issue: the
-    user was already waiting for their word), or open the PR and let it be the question? Proposed: ask first,
-    with the design above, since they may prefer another shape (e.g. a generic option-control hook).
+    - **A: the WebODM branch**, in `ignored/WebODM` on a branch from upstream master: the context, both hooks,
+      the guard, WebODM's Jest tests, and a live check on the dev server (which runs that checkout) with no
+      plugin, and with a small example plugin using each hook (kept out of the PR: it shows the docs' examples
+      work). Then the docs change. Nothing pushed: the user forks, pushes and opens the PRs.
+    - **B: the buttons in this plugin** (1.1.0), on the hook as merged upstream.
+  - **Open decisions** (when it is planned): ask WebODM's developers first (Discord #devtalk or an issue, with
+    this design), or open the PR and let it be the question? Proposed: ask first: a general API is theirs to
+    shape, and they may want other names or places (e.g. the New Task panel as well as the dialog).
 
 ## Port
 
