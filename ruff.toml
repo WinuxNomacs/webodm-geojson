@@ -4,5 +4,5 @@ line-length = 120
 extend-exclude = ["ignored"]
 
 [lint]
-# Style rewrites, not compatibility: the port keeps LuxODM's %-formatting and import order
+# Style rewrites, not compatibility: the code keeps its %-formatting and import order
 extend-ignore = ["UP031", "UP032", "I001"]

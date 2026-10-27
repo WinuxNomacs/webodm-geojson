@@ -1,9 +1,15 @@
 # Changelog
 
-## 1.0.0 — 2026-10-27
+## 1.0.1 — 2026-10-27
 
-The first release on official WebODM (3.3.2 or later): LuxODM's GeoJSON plugin 0.3.0, ported to the official
-plugin API.
+The first published release, for WebODM 3.3.2 or later: 1.0.0 with one fix (1.0.0 itself was not published).
+
+- Fixed: on a WebODM served over http, the editor's OpenStreetMap basemap stayed blank. Basemap URLs without a
+  scheme (`//…`) now load over https.
+
+## 1.0.0 — 2026-10-27 (not published)
+
+The first version, on the official plugin API.
 
 - The GeoJSON tab: the instance-wide library of boundaries and the editor (draw, import, edit the text, search
   with suggestions, download, save a copy, delete), with owners and admins.

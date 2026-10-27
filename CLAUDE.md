@@ -1,7 +1,6 @@
 # CLAUDE.md
 
-What Claude needs to know to work on the GeoJSON plugin for WebODM, ported from LuxODM's
-`coreplugins/geojson`. General working rules (branches, phases, testing) live in the user's own CLAUDE.md; this
+What Claude needs to know to work on the GeoJSON plugin for WebODM. General working rules (branches, phases, testing) live in the user's own CLAUDE.md; this
 file holds what is specific to this repository. It is committed and public: nothing private, nothing true only
 on one machine. Keep it short; edit in place.
 
@@ -11,7 +10,7 @@ on one machine. Keep it short; edit in place.
   `package.json`, `eslint.config.mjs`, `ruff.toml`, `requirements-dev.txt`) stay outside it.
 - **Official plugin rules only** (https://docs.webodm.org/plugin-development-guide): no Django models or
   migrations (data goes in the plugin's data stores), only the `PluginsAPI` hooks WebODM has, no changes to
-  WebODM itself. `upcoming-changes.md` lists what the port changes for this.
+  WebODM itself.
 - **Python 3.9 and Django 2.2** (WebODM 3.3.2): Ruff targets py39.
 - **Never push and never tag.** Nothing is published by a push yet (no CI). A release: Claude prepares a
   `release/X.Y.Z` branch (manifest version, `CHANGELOG.md`, `README.md`), builds the zip with `dev/package.sh`
@@ -24,7 +23,9 @@ on one machine. Keep it short; edit in place.
 ## Dev environment
 
 - `ignored/WebODM` is a checkout of https://github.com/WebODM/WebODM (ignored by git), at the commit the pinned
-  image was built from (3.3.2).
+  image was built from (3.3.2). The dev server runs that checkout, so a branch there (the Task Options PR,
+  `task-options-extensions`) is live on :8001; `ignored/WebODM-Docs` is https://github.com/WebODM/Docs (the
+  plugin guide).
 - `dev/webodm.sh up | down | logs [service] | ps` runs it in dev mode with `geojson/` mounted as
   `/webodm/coreplugins/geojson`, on http://localhost:8001, containers `gj-webapp`, `gj-worker`, `gj-db`,
   `gj-broker`, `gj-node-odx-1`, project and volumes `webodm-geojson`, so it runs beside another WebODM. Images
