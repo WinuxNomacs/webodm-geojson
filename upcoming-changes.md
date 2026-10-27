@@ -5,8 +5,8 @@
 **Up next**
 (2026-10-27: the user's order: the WebODM pull request ready to publish, then the plugin's controls on it; the
 user opens the PR on GitHub and contacts WebODM's developers once it is ready)
-1. **The GeoJSON controls back in the Task Options, on that hook** (1.1.0; to plan with the user). (Task Options
-   hook, phase B)
+1. **The GeoJSON controls back in the Task Options, on that hook** (1.1.0: built and checked now, released once
+   WebODM ships the hook). (Task Options hook, phase B)
 
 **Later**
 (nothing yet)
@@ -228,6 +228,22 @@ the hook) is built and checked on the PR branch, so the PR comes with a real plu
   - **Decided (the user, 2026-10-27):** build the pull request to a ready-to-publish state first, with this
     plugin's controls working on it (phase B on the PR branch, feature-detected); the user then opens the PR on
     GitHub and reaches out to WebODM's developers soon after.
+
+  - **Phase B, planned with the user (2026-10-27):**
+    - **Decided:** build and check it now against the phase A branch; release 1.1.0 only once a WebODM release
+      has the hook. Scope: LuxODM's two buttons only; a form row ("Boundary: Field 3 · Change") is left for
+      later.
+    - **Design:** LuxODM's `public/boundary_buttons.js`, moved from `addTaskOptionButton` to
+      `addTaskOptionControl`: for the `boundary` option it answers with a component (built with `window.React`,
+      no build step) rendering "Create GeoJSON" and "Use existing" inline after the option's import button. Each
+      opens the editor in a dialog over the options, with a new task's photo positions (`getPhotoPositions`) or
+      an existing task's shots and orthophoto; "Use for this task" calls the control's `setValue`, so the value
+      counts as typed by the user. The script registers only when `PluginsAPI.Dashboard.addTaskOptionControl`
+      exists: on WebODM without the hook the plugin is 1.0.0's. `plugin.py` loads the script and `geojson.css`
+      on every page and mounts the `basemaps` endpoint again (the dialog has no page to carry them).
+    - **Tests:** LuxODM's Jest test for the buttons, adapted to the hook's props; Django tests for the
+      `basemaps` endpoint and the script on the dashboard; a live check on :8001 for a new and an existing
+      task. The manifest stays at 1.0.0 until the release branch; `CHANGELOG.md` gets an "Unreleased" entry.
 
 ## Port
 
