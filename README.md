@@ -17,6 +17,7 @@ everyone on the WebODM instance. ODM crops a task's results to the boundary's ou
   use is refused with the reason. Its area is shown in m², ha or km².
 - **Shared, with owners:** everyone can see, use, download and copy every file; only its owner and admins can
   rename, change or delete it. Names are unique on the instance, whatever the case.
+- **In WebODM's theme:** the editor takes the instance's theme colors (Administration > Theme).
 
 **In a task's options** (Task Options > Edit), download a boundary from the library and load it with the
 `boundary` option's import button.
