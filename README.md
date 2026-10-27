@@ -3,8 +3,6 @@
 Draw, import and save polygons for the `boundary` option of a task (Bounds & Cropping), in a library shared by
 everyone on the WebODM instance. ODM crops a task's results to the boundary's outline.
 
-A port of LuxODM's GeoJSON plugin to the official WebODM plugin API.
-
 ## What it does
 
 - **A GeoJSON tab** in WebODM's menu opens the library: every saved boundary on the instance, with its owner,

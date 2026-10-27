@@ -1,7 +1,6 @@
 # CLAUDE.md
 
-What Claude needs to know to work on the GeoJSON plugin for WebODM, ported from LuxODM's
-`coreplugins/geojson`. General working rules (branches, phases, testing) live in the user's own CLAUDE.md; this
+What Claude needs to know to work on the GeoJSON plugin for WebODM. General working rules (branches, phases, testing) live in the user's own CLAUDE.md; this
 file holds what is specific to this repository. It is committed and public: nothing private, nothing true only
 on one machine. Keep it short; edit in place.
 
@@ -11,7 +10,7 @@ on one machine. Keep it short; edit in place.
   `package.json`, `eslint.config.mjs`, `ruff.toml`, `requirements-dev.txt`) stay outside it.
 - **Official plugin rules only** (https://docs.webodm.org/plugin-development-guide): no Django models or
   migrations (data goes in the plugin's data stores), only the `PluginsAPI` hooks WebODM has, no changes to
-  WebODM itself. `upcoming-changes.md` lists what the port changes for this.
+  WebODM itself.
 - **Python 3.9 and Django 2.2** (WebODM 3.3.2): Ruff targets py39.
 - **Never push and never tag.** Nothing is published by a push yet (no CI). A release: Claude prepares a
   `release/X.Y.Z` branch (manifest version, `CHANGELOG.md`, `README.md`), builds the zip with `dev/package.sh`
