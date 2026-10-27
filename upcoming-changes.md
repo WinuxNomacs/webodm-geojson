@@ -92,7 +92,8 @@ Built and checked 2026-10-27 (Done: Release 1.0.1). 1.0.0 is not published: no t
    carries the commit's timestamps, so a rebuild after another commit has another sha256; if `dist/` is lost,
    rebuild it at a0617fa, the commit it was built from (`git worktree add`, `dev/package.sh`) and use the new sha256 below.
 4. Check the download: `curl -sL <url> | sha256sum` gives the sha256 above.
-5. Open a pull request to https://github.com/WebODM/WebODM-Plugins adding to `directory.json`'s `plugins`:
+5. Open a pull request to https://github.com/WebODM/WebODM-Plugins adding to `directory.json`'s `plugins`
+   (**prepared 2026-10-27:** branch `add-geojson` in `ignored/WebODM-Plugins`, cc056f0; `main` pushed):
    ```json
    {
        "url": "https://github.com/WinuxNomacs/webodm-geojson/releases/download/v1.0.1/geojson-1.0.1.zip",
