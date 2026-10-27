@@ -19,8 +19,8 @@ and committed.
    and that the tab is back.
 5. **Live check on the installed copy** (the `live-check` skill): the library, drawing, import, save, search
    with suggestions, a second user who can only copy. Delete what the check made.
-6. **Leave it as found:** remove the installed plugin in Administration > Plugins (its data store stays: delete
-   the `geojson::library` key if the check left one), then `dev/webodm.sh up -d --force-recreate webapp worker`
+6. **Leave it as found:** remove the installed plugin in Administration > Plugins (its data store stays, shared
+   with the mounted copy: the library must hold what it held before the check), then `dev/webodm.sh up -d --force-recreate webapp worker`
    without `GJ_PLUGIN_DIR` to mount `geojson/` again.
 
 Then merge the release branch into `main` and tell the user: the zip and its sha256, the tag to make
