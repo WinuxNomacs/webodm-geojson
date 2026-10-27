@@ -8,8 +8,7 @@
 
 **Then**
 2. **A pull request to WebODM: Task Options extensions for any plugin, new and existing tasks** (designed
-   2026-10-27; to plan
-   after the release, and best after asking WebODM's developers). (Task Options hook)
+   2026-10-27; to plan after the release, and best after asking WebODM's developers). (Task Options hook)
 
 **Later**
 - **The Task Options buttons ("Create GeoJSON", "Use existing")** in this plugin: once WebODM has the hook (Then,
