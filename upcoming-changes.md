@@ -85,7 +85,8 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
 
 Built and checked 2026-10-27 (Done: Release 1.0.1). 1.0.0 is not published: no tag, no GitHub release.
 1. Make the repo public. **Done 2026-10-27.**
-2. Push `main`; tag `v1.0.1` on the merge of `release/1.0.1` into `main` and push the tag.
+2. Push `main`; tag `v1.0.1` on 69eaadc, the last commit of `release/1.0.1` (not its merge into `main`, which
+   also has the boundary buttons for 1.1.0), and push the tag: `git tag v1.0.1 69eaadc`.
 3. Create the GitHub release v1.0.1 with `CHANGELOG.md`'s 1.0.1 entry, and attach `dist/geojson-1.0.1.zip`
    exactly as built: sha256 `b030b4598a92d5418292c3a6488ab30e6c0a68c81a12536250159e977b8e177f`. The zip
    carries the commit's timestamps, so a rebuild after another commit has another sha256; if `dist/` is lost,
