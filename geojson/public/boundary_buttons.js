@@ -102,7 +102,7 @@
         frame.innerHTML = '<div class="gj-task-dialog-inner theme-secondary">' +
             '<div class="gj-task-dialog-header"><h4></h4>' +
               '<button type="button" class="btn btn-default btn-sm" data-gj="close"><i class="fa fa-times"></i> Close</button></div>' +
-            '<div class="gj-task-dialog-body"><p class="gj-task-dialog-loading"><i class="fa fa-circle-notch fa-spin"></i> Loading the editor…</p></div>' +
+            '<div class="gj-task-dialog-body"><p class="gj-task-dialog-loading text-muted"><i class="fa fa-circle-notch fa-spin"></i> Loading the editor…</p></div>' +
           "</div>";
         frame.querySelector("h4").textContent = title;
         host.appendChild(frame);
@@ -156,7 +156,7 @@
                     }}
                 });
             }, function (err) {
-                parts.body.innerHTML = '<p class="gj-error"></p>';
+                parts.body.innerHTML = '<p class="gj-error theme-color-button-danger"></p>';
                 parts.body.firstChild.textContent = err.message;
             });
         return {frame: parts.frame, close: close, opened: opened, editor: function () { return editor; }};
