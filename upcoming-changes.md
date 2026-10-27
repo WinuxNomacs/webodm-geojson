@@ -99,8 +99,12 @@ Built and checked 2026-10-27 (Done: Release 1.0.0); nothing published yet.
 
 ## Opening the WebODM pull requests (the user's steps, when ready)
 
-Built 2026-10-27 (Done: phase A); nothing pushed. As decided, open them once phase B (this plugin's controls on
-the hook) is built and checked on the PR branch, so the PR comes with a real plugin using it.
+Built 2026-10-27 (Done: phase A, phase B and the docs how-to). **Steps 1–4 done 2026-10-27:** upstream had not
+moved; the user forked both repos and pushed the branches, public for review: `task-options-extensions` at
+bf5f9502 on https://github.com/WinuxNomacs/WebODM (remote `fork`) and `task-options-hooks` at a4f1986 on
+https://github.com/WinuxNomacs/Docs (remote `fork`). The user is reviewing them with WebODM's lead developer
+(who recommended client-side hooks, which these are) and opens the PRs (step 5 on) when he gets back. Review
+changes before then: new commits on the same branches; a rebase would need `git push --force-with-lease`.
 1. **Ask Claude to bring the branches up to date** if upstream moved: fetch `origin`, rebase
    `task-options-extensions` (and `task-options-hooks`) on the new master, rerun WebODM's Jest and the live check.
 2. **Review the changes** (you must be able to explain them, per WebODM's `CONTRIBUTING.md`):
