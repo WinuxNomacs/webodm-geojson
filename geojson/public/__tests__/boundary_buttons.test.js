@@ -174,9 +174,10 @@ describe("the buttons beside a task's options", () => {
         expect(editor.inits).toEqual([]);
     });
 
-    test("an editor that cannot be loaded says so in the dialog", async () => {
+    test("an editor that cannot be loaded says so in the dialog, in the theme's danger color", async () => {
         const dialog = await open("Create GeoJSON", {load: () => Promise.reject(new Error("Could not load map_view.js"))});
         expect(dialog.frame.querySelector(".gj-error").textContent).toBe("Could not load map_view.js");
+        expect(dialog.frame.querySelector(".gj-error").classList.contains("theme-color-button-danger")).toBe(true);
     });
 });
 
