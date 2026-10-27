@@ -226,3 +226,4 @@ node_modules/
 
 # New requests (see the user's CLAUDE.md)
 new.md
+.claude/settings.local.json
