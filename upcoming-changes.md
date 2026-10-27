@@ -4,7 +4,8 @@
 
 **Up next**
 (2026-10-27: the port requested in `new.md`, planned the same day)
-1. **Port phase 1: the plugin and its library on official WebODM** (to plan). (Port)
+1. **Port phase 1: the plugin and its library on official WebODM** (planned 2026-10-27, design under Port >
+   Phase 1). (Port)
 
 **Then**
 (nothing yet)
@@ -28,7 +29,7 @@
   accordance with plugin development guidelines so we can plan accordingly. Prefer code compatibility changes
   to rewrites as the brunt of this is expected to be python version compatibility changes." Guidelines:
   https://docs.webodm.org/plugin-development-guide and https://github.com/WebODM/WebODM-Plugins.
-  - **Builds on:** LuxODM's `coreplugins/geojson` (plugin 0.2.0: `api.py`, `boundary.py`, `plugin.py`,
+  - **Builds on:** LuxODM's `coreplugins/geojson` (plugin 0.3.0: `api.py`, `boundary.py`, `plugin.py`,
     `public/`, `templates/editor.html`), its model `app/models/geojson_boundary.py` (migration 0076), its
     tests `app/tests/test_geojson_plugin.py` (24) and `public/__tests__/` (94 Jest), and the core hook it added,
     `PluginsAPI.Dashboard.addTaskOptionButton`.
@@ -69,9 +70,32 @@
     - **Phase 1: the plugin and its library** (LuxODM's phase 1): the back end on the data store, the editor
       page, Django and Jest tests, a live check on the dev server (port 8001).
     - **Later: the Task Options buttons**, when WebODM's developers answer (a hook upstream, or another way).
-  - **Open decisions:**
-    - Keep the editor's dialog mode (`geojson_editor.js`, `map_view.js`, tested) dormant for the buttons'
-      return, or remove it until then? Proposed: keep it, since the port prefers compatibility to rewrites.
-    - Bring LuxODM's saved boundaries over (a one-off import of its library), or start empty? Proposed: start
-      empty; files can be downloaded from LuxODM and imported one by one.
-    - Plugin version: start at 1.0.0 for the first release on WebODM, or continue from 0.2.0? Proposed: 1.0.0.
+  - **Decisions** (the user's, 2026-10-27, as proposed):
+    - The editor's dialog mode (`geojson_editor.js`, `map_view.js`, tested) stays, dormant, for the buttons' return.
+    - The library starts empty: LuxODM's files can be downloaded there and imported one by one.
+    - The plugin starts at version 1.0.0.
+  - **Phase 1 design:**
+    - **Back end** (`geojson/`):
+      - `boundary.py`: LuxODM's, unchanged (it is Python 3.9 already).
+      - `library.py` (new, in place of the model): the library is the JSON value under the key `library` of
+        `GlobalDataStore('geojson')`: `{"next_id": n, "files": [{id, name, geojson, area, owner_id, created_at,
+        updated_at}]}`, dates as ISO strings. Functions to list (most recently changed first), get, create,
+        update and delete a file. Every change runs in `transaction.atomic()` under a Postgres advisory lock
+        (`pg_advisory_xact_lock`), then reads, changes and writes the value: only the store's documented API
+        touches the data. Ids are integers from `next_id`, never reused, so the URLs stay `boundaries/<id>`.
+      - `api.py`: the serializer becomes a plain `Serializer` with LuxODM's fields and checks (name required and
+        unique whatever the case, the polygon normalized by `boundary.py`, the area computed); the views become
+        `APIView`s with the same URLs, methods, permissions (anyone reads, the owner or an admin changes) and
+        JSON, so the front end is unchanged. The owner's username comes from the ids in one query; a deleted
+        user's files show no owner. The `basemaps` endpoint goes (only the buttons used it).
+      - `plugin.py`: LuxODM's menu tab, editor page and API, without `include_js_files`/`include_css_files`
+        (they served the buttons on every page; the editor page links its CSS itself).
+      - `manifest.json`: version 1.0.0, LuxODM's description and tags.
+    - **Front end** (`geojson/public/`): LuxODM's scripts, CSS, `package.json` and lock file and
+      `templates/editor.html` as they are, without `boundary_buttons.js` and its tests. WebODM runs `npm install`
+      there when it builds plugins.
+    - **Tests:** LuxODM's Django tests in `geojson/tests/`, without the two on the buttons and the basemaps
+      endpoint, plus: the library is stored as one value in the data store, ids are not reused after a delete,
+      two saves in a row both survive. The Jest tests in `public/__tests__/` (without `boundary_buttons`).
+    - **Live check** (with a dev account from the user): open the tab, draw, import, save, rename, copy,
+      download and delete a file, with a second user who can only copy; then remove what the check made.
