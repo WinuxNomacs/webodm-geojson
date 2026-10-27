@@ -11,13 +11,15 @@
 **Later**
 - **The Task Options buttons ("Create GeoJSON", "Use existing")**: on hold until WebODM's developers say which
   UI extensions plugins may use. (Port)
-- **Autocomplete in the address search** (in LuxODM's "Up next", not built there yet). (Port)
 
 **Done**
 - **Port phase 1: the plugin and its library on official WebODM** — 2026-10-27. `geojson/` (`library.py` keeps
   the library in the global data store under a lock; `api.py`, `boundary.py`, `plugin.py`, `public/`,
   `templates/` from LuxODM), version 1.0.0. Tests: `geojson/tests/test_geojson.py` (29), `public/__tests__/` (94
   Jest). Checked live on :8001 as an admin and a second user. (Port)
+- **Autocomplete in the address search** — 2026-10-27, came with phase 1: LuxODM built it (6847acfb, 5e6a0236)
+  before the port copied `public/`, so the ported files are LuxODM's current ones (Photon suggestions in
+  `geojson_core.js`, the list in `search_panel.js`, Jest in `public/__tests__/`). Checked live on :8001. (Port)
 - **Dev environment** — 2026-10-27. Upstream WebODM in dev mode beside LuxODM (`dev/webodm.sh`,
   `dev/compose.yml`), a Python 3.9 `.venv`, Ruff for 3.9, Jest, ESLint and Playwright (`package.json`,
   `eslint.config.mjs`). The skeleton plugin in `geojson/` registers in WebODM.
@@ -68,6 +70,9 @@
   - **Kept as is:** the menu tab and editor page (`main_menu`, `app_mount_points`, `template_path`, base
     template, `{% theme %}`), the API under `api_mount_points`, `Basemap.get_cached_basemaps()`, the ES5 UMD
     front end and its Jest tests, the address search on Nominatim (the browser calls it, as in LuxODM).
+  - **Request, 2026-10-27** (`new.md`): "ensure the new autocomplete functionality recently added to luxodm's
+    geojson plugin is ported here as well." Found already ported with phase 1 (see Done): LuxODM's address
+    suggestions from Photon (photon.komoot.io; Enter without a suggestion still searches Nominatim).
   - **Proposed phases:**
     - **Phase 1: the plugin and its library** (LuxODM's phase 1): the back end on the data store, the editor
       page, Django and Jest tests, a live check on the dev server (port 8001).
