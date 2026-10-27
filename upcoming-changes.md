@@ -92,6 +92,9 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
 
 Built and checked 2026-10-27 (Done: Release 1.0.2). 1.0.0 and 1.0.1 are not published: no tags, no GitHub
 releases.
+**Steps 2–4 done 2026-10-27:** `main` pushed, `v1.0.2` tagged on d2178cf, the GitHub release
+https://github.com/WinuxNomacs/webodm-geojson/releases/tag/v1.0.2 with the zip (its download gives the sha256
+below). Step 5 is next: the user forks WebODM-Plugins, pushes `add-geojson` (f27ab39) and opens the PR.
 1. Make the repo public. **Done 2026-10-27.**
 2. Push `main`; tag `v1.0.2` on the last commit of `release/1.0.2` (not its merge into `main`, which also has
    the boundary buttons for 1.1.0), and push the tag.
