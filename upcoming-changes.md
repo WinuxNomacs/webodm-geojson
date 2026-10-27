@@ -14,6 +14,12 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
    phase B)
 
 **Done**
+- **The plugin guide's how-to for the Task Options hooks** — 2026-10-27, `task-options-hooks` in
+  `ignored/WebODM-Docs` (a4f1986): a first plugin, JSX as the hook's dependency, the props and `taskOptions`
+  functions with their return values, an example per hook, existing tasks, older WebODM versions, own dialogs.
+  Every example ran as written in a throwaway plugin on :8001 (new and existing task), removed afterwards. The
+  user is reviewing the branch with WebODM's lead developer, who recommended client-side hooks: the PR is
+  kept as is (three `Dashboard` hooks; nothing server-side).
 - **The GeoJSON controls on the Task Options hook (phase B)** — 2026-10-27, built, released later (1.1.0).
   `geojson/public/boundary_buttons.js` (LuxODM's, on `addTaskOptionControl`), `plugin.py` (the script and
   `geojson.css` on every page, the `basemaps` endpoint), `api.py` (`BasemapsView`). Tests: Jest 120 (was 94,
@@ -99,7 +105,7 @@ the hook) is built and checked on the PR branch, so the PR comes with a real plu
    `task-options-extensions` (and `task-options-hooks`) on the new master, rerun WebODM's Jest and the live check.
 2. **Review the changes** (you must be able to explain them, per WebODM's `CONTRIBUTING.md`):
    `git -C ignored/WebODM log -p master..task-options-extensions` (2 commits: the `ApiFactory` fix, then the
-   hooks) and `git -C ignored/WebODM-Docs log -p main..task-options-hooks` (1 commit).
+   hooks) and `git -C ignored/WebODM-Docs log -p main..task-options-hooks` (2 commits: the hooks, then the how-to).
 3. **Fork** https://github.com/WebODM/WebODM and https://github.com/WebODM/Docs on GitHub.
 4. **Push the branches to the forks:**
    ```sh
