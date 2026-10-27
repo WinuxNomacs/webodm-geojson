@@ -70,3 +70,4 @@
 .gj-task-dialog-header h4{ margin: 0; }
 .gj-task-dialog-body{ flex: 1; min-height: 0; }
 .gj-task-dialog-loading{ color: #777; }
+.gj-option-buttons{ display: inline-block; white-space: nowrap; }             /* the two buttons wrap together beside the boundary option */

@@ -12,6 +12,7 @@ from django.db import connection
 from django.test import Client, TransactionTestCase
 from rest_framework import status
 
+from app.models import Basemap
 from app.plugins import enable_plugin, disable_plugin, get_plugin_by_name
 from app.plugins.data_store import GlobalDataStore
 from app.tests.classes import BootTestCase
@@ -150,11 +151,17 @@ class TestGeoJsonPlugin(BootTestCase):
         self.assertEqual(Client().get(API + "boundaries").status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(Client().get(API + "boundaries/%d" % self.mine["id"]).status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_other_pages_get_only_the_menu_tab_not_the_task_buttons(self):
+    def test_other_pages_get_the_menu_tab_and_the_task_buttons(self):
         res = self.client.get("/dashboard/")
         self.assertContains(res, 'href="/plugins/geojson/"')
-        self.assertNotContains(res, "boundary_buttons.js")
-        self.assertNotContains(res, "/plugins/geojson/geojson.css")
+        self.assertContains(res, "/plugins/geojson/boundary_buttons.js")
+        self.assertContains(res, "/plugins/geojson/geojson.css")
+
+    def test_the_basemaps_are_given_to_logged_in_users_for_the_task_dialog(self):
+        res = self.client.get(API + "basemaps")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.json(), json.loads(json.dumps(Basemap.get_cached_basemaps())))
+        self.assertEqual(Client().get(API + "basemaps").status_code, status.HTTP_403_FORBIDDEN)
 
     def test_the_library_is_one_value_in_the_plugin_s_global_data_store(self):
         value = GlobalDataStore("geojson").get_json("library")

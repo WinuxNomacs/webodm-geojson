@@ -18,9 +18,16 @@ A port of [LuxODM](https://github.com/WinuxNomacs/LuxODM)'s GeoJSON plugin to th
 - **Shared, with owners:** everyone can see, use, download and copy every file; only its owner and admins can
   rename, change or delete it. Names are unique on the instance, whatever the case.
 
-To use a boundary in a task, download it from the library and load it with the import button of the task's
-`boundary` option (Task Options > Edit). Buttons beside that option, as LuxODM has, need a hook WebODM does not
-have yet; they are planned once it does.
+**In a task's options** (Task Options > Edit, for a new task or an existing one), two buttons beside the
+`boundary` option:
+- **Create GeoJSON** opens the editor over the options, on a map of the task's photos (for a processed task,
+  its photo positions and orthophoto), starting from the boundary the task already has;
+- **Use existing** opens the library.
+
+"Use for this task" fills the `boundary` option with the polygon. The buttons need a WebODM with the Task Options
+hook (`PluginsAPI.Dashboard.addTaskOptionControl`), proposed to WebODM and not yet in a
+release. Without it, the plugin works as before: download a boundary from the library and load it with the
+option's import button.
 
 ## Requirements
 

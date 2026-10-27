@@ -5,13 +5,21 @@
 **Up next**
 (2026-10-27: the user's order: the WebODM pull request ready to publish, then the plugin's controls on it; the
 user opens the PR on GitHub and contacts WebODM's developers once it is ready)
-1. **The GeoJSON controls back in the Task Options, on that hook** (1.1.0; to plan with the user). (Task Options
-   hook, phase B)
+(nothing: the user opens the WebODM pull requests, "Opening the WebODM pull requests" below)
 
 **Later**
-(nothing yet)
+1. **Release 1.1.0** once a WebODM release has the Task Options hook: `release/1.1.0` (manifest version,
+   `webodmMinVersion` left at 3.3.2 since the buttons are feature-detected, `CHANGELOG.md`'s "Unreleased" entry
+   dated, the README naming the WebODM version with the hook), then the release check. (Task Options hook,
+   phase B)
 
 **Done**
+- **The GeoJSON controls on the Task Options hook (phase B)** — 2026-10-27, built, released later (1.1.0).
+  `geojson/public/boundary_buttons.js` (LuxODM's, on `addTaskOptionControl`), `plugin.py` (the script and
+  `geojson.css` on every page, the `basemaps` endpoint), `api.py` (`BasemapsView`). Tests: Jest 120 (was 94,
+  `public/__tests__/boundary_buttons.test.js`), Django 30 (was 29). Checked live on :8001 on the PR branch (a new
+  task: Create GeoJSON, Escape, "(Custom)" preset, the review; an existing task: Use existing, saved) and on
+  upstream master without the hook (no buttons, no errors). (Task Options hook, "Built (phase B)")
 - **The WebODM pull request, Task Options extensions (phase A)** — 2026-10-27, built, not yet opened (the user
   reviews, pushes from a fork and opens both PRs). Branch `task-options-extensions` in `ignored/WebODM` (2
   commits on upstream master 88bd0034) and `task-options-hooks` in `ignored/WebODM-Docs` (the plugin guide).
@@ -228,6 +236,28 @@ the hook) is built and checked on the PR branch, so the PR comes with a real plu
   - **Decided (the user, 2026-10-27):** build the pull request to a ready-to-publish state first, with this
     plugin's controls working on it (phase B on the PR branch, feature-detected); the user then opens the PR on
     GitHub and reaches out to WebODM's developers soon after.
+
+  - **Phase B, planned with the user (2026-10-27):**
+    - **Decided:** build and check it now against the phase A branch; release 1.1.0 only once a WebODM release
+      has the hook. Scope: LuxODM's two buttons only; a form row ("Boundary: Field 3 · Change") is left for
+      later.
+    - **Design:** LuxODM's `public/boundary_buttons.js`, moved from `addTaskOptionButton` to
+      `addTaskOptionControl`: for the `boundary` option it answers with a component (built with `window.React`,
+      no build step) rendering "Create GeoJSON" and "Use existing" inline after the option's import button. Each
+      opens the editor in a dialog over the options, with a new task's photo positions (`getPhotoPositions`) or
+      an existing task's shots and orthophoto; "Use for this task" calls the control's `setValue`, so the value
+      counts as typed by the user. The script registers only when `PluginsAPI.Dashboard.addTaskOptionControl`
+      exists: on WebODM without the hook the plugin is 1.0.0's. `plugin.py` loads the script and `geojson.css`
+      on every page and mounts the `basemaps` endpoint again (the dialog has no page to carry them).
+    - **Tests:** LuxODM's Jest test for the buttons, adapted to the hook's props; Django tests for the
+      `basemaps` endpoint and the script on the dashboard; a live check on :8001 for a new and an existing
+      task. The manifest stays at 1.0.0 until the release branch; `CHANGELOG.md` gets an "Unreleased" entry.
+
+  - **Built (phase B, 2026-10-27):** as designed. Fixed on the way: the editor's dialog did not take the focus,
+    so Escape reached the button under it and closed the options' modal instead (LuxODM has the same bug); it
+    now focuses the dialog and gives the focus back to its button. The two buttons wrap together in the narrow
+    options dialog. Left as they were: LuxODM's later changes to the ported editor files (`geojson_core.js`,
+    `map_view.js`, `search_panel.js`, `geojson.css`'s search spinner), which are not part of this phase.
 
 ## Port
 

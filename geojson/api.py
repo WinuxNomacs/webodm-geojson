@@ -5,6 +5,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app.models import Basemap
+
 from . import library
 from .boundary import BoundaryError, normalize
 
@@ -134,3 +136,11 @@ class BoundaryDetailView(APIView):
         except library.NotFound:
             raise Http404
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class BasemapsView(APIView):
+    """The map layers (Administration > Basemaps), for the editor in a task's dialog, which has no page of its own"""
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        return Response(Basemap.get_cached_basemaps())

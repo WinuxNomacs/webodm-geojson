@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased (1.1.0, once a WebODM release has the Task Options hook)
+
+- The "Create GeoJSON" and "Use existing" buttons beside a task's `boundary` option, for new and existing tasks,
+  on WebODM's Task Options hook (`addTaskOptionControl`). On a WebODM without the hook, nothing changes.
+- The editor's dialog over the options takes the focus, so that Escape closes it and not the options.
+
 ## 1.0.0 — 2026-10-27
 
 The first release on official WebODM (3.3.2 or later): LuxODM's GeoJSON plugin 0.3.0, ported to the official
