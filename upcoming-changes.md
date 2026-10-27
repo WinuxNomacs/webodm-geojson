@@ -78,7 +78,8 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
 
 ## Publishing 1.0.0 (the user's steps, when ready)
 
-Built and checked 2026-10-27 (Done: Release 1.0.0); nothing published yet.
+Built and checked 2026-10-27 (Done: Release 1.0.0). **Step 1 done 2026-10-27:** the repo is public; LuxODM
+stays private, so the README names it without a link (branch `readme-links`, to push with `main`).
 1. Make the repo public (`CLAUDE.md` and this plan are written to be public). The README links to LuxODM's repo:
    if that one stays private, remove the link first.
 2. Push `main`; tag `v1.0.0` on the merge of `release/1.0.0` (da665a4) and push the tag.
@@ -103,7 +104,9 @@ Built 2026-10-27 (Done: phase A, phase B and the docs how-to). **Steps 1–4 don
 moved; the user forked both repos and pushed the branches, public for review: `task-options-extensions` at
 bf5f9502 on https://github.com/WinuxNomacs/WebODM (remote `fork`) and `task-options-hooks` at a4f1986 on
 https://github.com/WinuxNomacs/Docs (remote `fork`). The user is reviewing them with WebODM's lead developer
-(who recommended client-side hooks, which these are) and opens the PRs (step 5 on) when he gets back. Review
+(who recommended client-side hooks, which these are). **Step 5 done 2026-10-27:** the user opened
+https://github.com/WebODM/WebODM/pull/2041 (its "Test Docker" check waits for a maintainer's approval); next,
+the docs PR (step 6), linked from #2041. Review
 changes before then: new commits on the same branches; a rebase would need `git push --force-with-lease`.
 1. **Ask Claude to bring the branches up to date** if upstream moved: fetch `origin`, rebase
    `task-options-extensions` (and `task-options-hooks`) on the new master, rerun WebODM's Jest and the live check.
