@@ -1,0 +1,21 @@
+{% extends "app/plugins/templates/base.html" %}
+{% load settings %}
+{% block content %}
+<link rel="stylesheet" href="{{ public }}node_modules/maplibre-gl/dist/maplibre-gl.css">
+<link rel="stylesheet" href="{{ public }}geojson.css">
+
+{# geojson_editor.js builds the library and the editor in here; the top bars take the theme's colors, as in the mission planner #}
+<div id="gj-editor" data-api="{{ api }}" data-bar-style="background-color: {% theme "secondary" %}; border-bottom: 1px solid {% theme "border" %};">
+    {% csrf_token %}
+    {{ basemaps|json_script:"gj-basemaps" }}
+</div>
+
+<script src="{{ public }}node_modules/maplibre-gl/dist/maplibre-gl.js"></script>
+<script src="{{ public }}node_modules/terra-draw/dist/terra-draw.umd.js"></script>
+<script src="{{ public }}node_modules/terra-draw-maplibre-gl-adapter/dist/terra-draw-maplibre-gl-adapter.umd.js"></script>
+<script src="{{ public }}geojson_core.js"></script>
+<script src="{{ public }}layers_panel.js"></script>
+<script src="{{ public }}search_panel.js"></script>
+<script src="{{ public }}map_view.js"></script>
+<script src="{{ public }}geojson_editor.js"></script>
+{% endblock %}
