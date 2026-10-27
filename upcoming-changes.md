@@ -12,6 +12,8 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
    `webodmMinVersion` left at 3.3.2 since the buttons are feature-detected, `CHANGELOG.md`'s "Unreleased" entry
    dated, the README naming the WebODM version with the hook), then the release check. (Task Options hook,
    phase B)
+   (2026-10-27: asked whether to release now, since the buttons are feature-detected and safe on WebODM
+   without the hook, the user chose to wait: the hook's API can still change in review.)
 
 **Done**
 - **Release 1.0.2** — 2026-10-27, `release/1.0.2` from the 1.0.1 release (69eaadc) with `theme-colors`: the
