@@ -5,14 +5,18 @@
 **Up next**
 (2026-10-27: the user's order: the WebODM pull request ready to publish, then the plugin's controls on it; the
 user opens the PR on GitHub and contacts WebODM's developers once it is ready)
-1. **A pull request to WebODM: Task Options extensions for any plugin, new and existing tasks** (designed
-   2026-10-27; to plan in detail). (Task Options hook, phase A)
-2. **The GeoJSON controls back in the Task Options, on that hook** (1.1.0; to plan). (Task Options hook, phase B)
+1. **The GeoJSON controls back in the Task Options, on that hook** (1.1.0; to plan with the user). (Task Options
+   hook, phase B)
 
 **Later**
 (nothing yet)
 
 **Done**
+- **The WebODM pull request, Task Options extensions (phase A)** — 2026-10-27, built, not yet opened (the user
+  reviews, pushes from a fork and opens both PRs). Branch `task-options-extensions` in `ignored/WebODM` (2
+  commits on upstream master 88bd0034) and `task-options-hooks` in `ignored/WebODM-Docs` (the plugin guide).
+  WebODM's Jest: 55 suites, 81 tests (was 53, 61). Checked live on :8001 for a new and an existing task, with
+  no plugin and with an example plugin using each hook. (Task Options hook, "Built")
 - **Release 1.0.0** — 2026-10-27. `README.md`, `CHANGELOG.md`, `experimental: false`, `dev/package.sh` (the zip
   and its sha256), the `release-check` skill. The zip was installed through WebODM's plugin upload with its
   sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it. To publish
@@ -166,6 +170,29 @@ Built and checked 2026-10-27 (Done: Release 1.0.0); nothing published yet.
       hook (kept out of the PR: it shows the docs' examples work). Then the docs change. Nothing pushed: the user forks, pushes and opens the PRs.
     - **B: the controls in this plugin** (1.1.0), built and checked against the phase A branch, released once
       the hook is in a WebODM release (the feature detection keeps 1.1.0 working without it).
+  - **Built (phase A, 2026-10-27):**
+    - **Commit 1, `ApiFactory`:** a trigger's reply listener used to remove itself after the first reply to *any*
+      trigger of the hook, so replies from a plugin whose dependencies load later, or to other triggers waiting at
+      once (one per option), could be lost; and with no plugin it was never removed. It now counts the listening
+      plugins, takes only its own replies and stops after the last; no plugin, no listener. Its test shows a slow
+      plugin's reply lost on the old code. This fixes the leak for every hook, not only the new ones.
+    - **Commit 2, the hooks:** `Dashboard.js` (3 endpoints), `TaskOptionsPluginItems.jsx` (new: triggers a hook,
+      renders what plugins return, each in an error boundary; `hasListeners(hook)` for the no-plugin guard),
+      `EditTaskForm.jsx` (`getPluginContext`, form `taskOptions`, the form row), `EditPresetDialog.jsx` (dialog
+      `taskOptions`, the panel item, props for the option controls), `ProcessingNodeOption.jsx` (`setValue`, the
+      inline controls), `NewTaskPanel.jsx` (`getPhotoPositions`, `getFiles`, `filesCount` to the form). About 280
+      lines of code and 300 of tests. `EditTaskPanel.jsx` needed no change: `mode` comes from `task`.
+    - **Changed from the design:** a value a plugin sets from the form row goes in the "(Custom)" preset, as if the
+      user had edited the options, instead of a hidden override: it shows in the selector and in Edit, and the
+      question for WebODM's developers is gone. `context` also has `inReview`. A component may also be an
+      element or a list; option controls render inline beside the option's input.
+    - **Live check:** without the example plugin, the forms show no plugin markup, nothing waits for replies, and
+      the console has no errors. With it, every hook rendered in both flows, its values reached the review and the
+      saved task (`crop`, `dsm`, `boundary`), and a control made to throw was left out with the dialog working.
+      The example plugin, the check's task and the plugin row were removed afterwards.
+    - **For the user, before opening the PRs:** read the two commits; the PR description in your own words, with
+      the AI disclosure (Claude Opus 5.5 wrote the code, tests and docs; you reviewed and tested them) and how long
+      it took; fork WebODM and WebODM/Docs, push the branches, open the PRs and link them to each other.
   - **Decided (the user, 2026-10-27):** build the pull request to a ready-to-publish state first, with this
     plugin's controls working on it (phase B on the PR branch, feature-detected); the user then opens the PR on
     GitHub and reaches out to WebODM's developers soon after.
