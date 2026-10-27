@@ -7,6 +7,6 @@
 	"repository": "https://github.com/WinuxNomacs/webodm-geojson",
 	"tags": ["geojson", "boundary", "crop"],
 	"homepage": "https://github.com/WinuxNomacs/webodm-geojson",
-	"experimental": true,
+	"experimental": false,
 	"deprecated": false
 }

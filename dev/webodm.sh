@@ -9,7 +9,8 @@ webodm="$repo/ignored/WebODM"
 export WO_PORT="${WO_PORT:-8001}" GJ_LIVERELOAD_PORT="${GJ_LIVERELOAD_PORT:-35730}"
 export WO_HOST=localhost WO_DEBUG=YES WO_DEV=YES WO_BROKER=redis://broker WO_DEFAULT_NODES=1
 export WO_MEDIA_DIR=appmedia WO_DB_DIR=dbdata WO_SECRET_KEY="${WO_SECRET_KEY:-}"
-export GJ_PLUGIN_DIR="$repo/geojson"
+# GJ_PLUGIN_DIR=<empty dir> runs WebODM without the mounted plugin (the release check installs the zip instead)
+export GJ_PLUGIN_DIR="${GJ_PLUGIN_DIR:-$repo/geojson}"
 
 compose=(docker compose -p webodm-geojson --project-directory "$webodm"
          -f "$webodm/docker-compose.yml" -f "$webodm/docker-compose.nodeodm.yml"

@@ -23,7 +23,13 @@ look at them, and read the page's console messages.
 - The change itself, on the user's real data where it applies (the GeoJSON menu tab, the editor, the library).
 - The browser console has no new errors.
 
+## Before
+
+Note what is there already (the library's files: `GET /api/plugins/geojson/boundaries`): the user works on this
+server too. Give everything the check creates a name of its own (e.g. starting "Live check").
+
 ## Afterwards
 
-Delete everything the check created (saved boundaries, tasks, projects) through the UI or the API, and say
-what was checked and what was removed.
+Delete only what the check created (saved boundaries, users, tasks, projects), by those names, through the UI
+or the API; never "everything in the library". Compare with what was there before, and say what was checked and
+what was removed.

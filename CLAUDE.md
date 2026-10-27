@@ -13,8 +13,10 @@ on one machine. Keep it short; edit in place.
   migrations (data goes in the plugin's data stores), only the `PluginsAPI` hooks WebODM has, no changes to
   WebODM itself. `upcoming-changes.md` lists what the port changes for this.
 - **Python 3.9 and Django 2.2** (WebODM 3.3.2): Ruff targets py39.
-- **Never push and never tag.** Nothing is published by a push yet (no CI); a release is a zip at a public URL
-  plus an entry in WebODM-Plugins' `directory.json`, both done by the user.
+- **Never push and never tag.** Nothing is published by a push yet (no CI). A release: Claude prepares a
+  `release/X.Y.Z` branch (manifest version, `CHANGELOG.md`, `README.md`), builds the zip with `dev/package.sh`
+  (`dist/geojson-X.Y.Z.zip` and its sha256), runs the `release-check` skill and merges; the user tags `vX.Y.Z`,
+  attaches the zip to the GitHub release and adds `{url, sha256}` to WebODM-Plugins' `directory.json`.
 - **`README.md` is the plugin's public page** (the repo is public from the 1.0.0 release): every feature change
   updates it on the same branch (what the plugin does, installing, using it, the outside services it calls).
 - Planned in `upcoming-changes.md`; new requests arrive in `new.md` (untracked).
@@ -34,7 +36,7 @@ on one machine. Keep it short; edit in place.
 
 ## Tests and checks
 
-The `test` and `live-check` skills in `.claude/skills` have the steps.
+The `test`, `live-check` and `release-check` skills in `.claude/skills` have the steps.
 
 - Django: `docker exec -w /webodm gj-webapp python manage.py test --noinput coreplugins.geojson.tests.test_geojson`. One run
   at a time: every run uses the same test database.
