@@ -22,7 +22,7 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
   afterwards), then the zip installed through WebODM's plugin upload and the live check passed on it. 1.0.1
   is not published: replaced by 1.0.2. (Release)
 - **Release 1.0.1** — 2026-10-27, `release/1.0.1` from the 1.0.0 release (da665a4): 1.0.0 with the http
-  basemap fix, the first published release (the user, 2026-10-27: "I don't want to release 1.0.0"; the boundary
+  basemap fix, not published: replaced by 1.0.2 (the user, 2026-10-27: "I don't want to release 1.0.0"; the boundary
   buttons stay for 1.1.0). `CHANGELOG.md`, `README.md` (the buttons described as coming in 1.1.0), the manifest.
   Tests: Jest 95, Django 34 (with WebODM's plugin tests). The zip was installed through WebODM's plugin upload
   with its sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it
