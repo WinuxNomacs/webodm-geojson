@@ -41,7 +41,11 @@
        the storage the guide offers. Consequences: uniqueness of names, ids, the owner and the dates are kept by
        the plugin's code, not the database. A deleted user's files keep a dangling owner id (shown as a deleted
        user; admins still change them) where the model had `SET_NULL`. The files are visible and editable in
-       Administration > Plugin Datum, which the guide states for all data stores.
+       Administration > Plugin Datum, which the guide states for all data stores. Layout (the user's decision,
+       2026-10-27): the whole library is one JSON value under one key, read and written only through the
+       store's documented API; each save (read, change, write) holds a lock in a transaction so two saves at
+       once cannot drop an edit. Rejected: one key per boundary, since the store cannot list its keys (it would
+       need an index key with the same lock, or queries on `PluginDatum` beyond the guide's API).
     2. **No Task Options buttons.** `Dashboard.addTaskOptionButton` does not exist upstream (its hooks are
        `addTaskActionButton`, `addNewTaskPanelItem`, `addNewTaskButton`, `addImportTaskItem`), and neither does
        the task context that LuxODM's `EditTaskForm`/`NewTaskPanel` pass to it. The user's decision
