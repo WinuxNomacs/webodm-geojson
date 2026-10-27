@@ -14,6 +14,12 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
    phase B)
 
 **Done**
+- **Release 1.0.1** — 2026-10-27, `release/1.0.1` from the 1.0.0 release (da665a4): 1.0.0 with the http
+  basemap fix, the first published release (the user, 2026-10-27: "I don't want to release 1.0.0"; the boundary
+  buttons stay for 1.1.0). `CHANGELOG.md`, `README.md` (the buttons described as coming in 1.1.0), the manifest.
+  Tests: Jest 95, Django 34 (with WebODM's plugin tests). The zip was installed through WebODM's plugin upload
+  with its sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it
+  (library, copy and rights with a second user, search, OpenStreetMap tiles on http). (Release)
 - **The plugin guide's how-to for the Task Options hooks** — 2026-10-27, `task-options-hooks` in
   `ignored/WebODM-Docs` (a4f1986): a first plugin, JSX as the hook's dependency, the props and `taskOptions`
   functions with their return values, an example per hook, existing tasks, older WebODM versions, own dialogs.
@@ -33,8 +39,8 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
   no plugin and with an example plugin using each hook. (Task Options hook, "Built")
 - **Release 1.0.0** — 2026-10-27. `README.md`, `CHANGELOG.md`, `experimental: false`, `dev/package.sh` (the zip
   and its sha256), the `release-check` skill. The zip was installed through WebODM's plugin upload with its
-  sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it. To publish
-  (the user): the repo made public, tag v1.0.0, the zip on its GitHub release, the `directory.json` entry.
+  sha256 (a wrong one is refused), npm ran in the installed copy, and the live check passed on it. Not
+  published: replaced by 1.0.1.
   (Release)
 - **Phase 1: the plugin and its library on official WebODM** — 2026-10-27. `geojson/` (`library.py` keeps
   the library in the global data store under a lock; `api.py`, `boundary.py`, `plugin.py`, `public/`,
@@ -75,21 +81,21 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
       other entries do). The README is kept current with every feature change from now on (`CLAUDE.md`).
     - `experimental`: `false`.
 
-## Publishing 1.0.0 (the user's steps, when ready)
+## Publishing 1.0.1 (the user's steps, when ready)
 
-Built and checked 2026-10-27 (Done: Release 1.0.0). **Step 1 done 2026-10-27:** the repo is public.
-1. Make the repo public (`CLAUDE.md` and this plan are written to be public).
-2. Push `main`; tag `v1.0.0` on the merge of `release/1.0.0` (da665a4) and push the tag.
-3. Create the GitHub release v1.0.0 with `CHANGELOG.md`'s 1.0.0 entry, and attach `dist/geojson-1.0.0.zip`
-   exactly as built: sha256 `a71c42c30329e1a63b266cd2d61dc3f30298c6906bf5b4b689e1b504b0731f7a`. The zip
+Built and checked 2026-10-27 (Done: Release 1.0.1). 1.0.0 is not published: no tag, no GitHub release.
+1. Make the repo public. **Done 2026-10-27.**
+2. Push `main`; tag `v1.0.1` on the merge of `release/1.0.1` into `main` and push the tag.
+3. Create the GitHub release v1.0.1 with `CHANGELOG.md`'s 1.0.1 entry, and attach `dist/geojson-1.0.1.zip`
+   exactly as built: sha256 `b030b4598a92d5418292c3a6488ab30e6c0a68c81a12536250159e977b8e177f`. The zip
    carries the commit's timestamps, so a rebuild after another commit has another sha256; if `dist/` is lost,
-   rebuild it at da665a4 (`git worktree add`, `dev/package.sh`) and use the new sha256 below.
+   rebuild it at a0617fa, the commit it was built from (`git worktree add`, `dev/package.sh`) and use the new sha256 below.
 4. Check the download: `curl -sL <url> | sha256sum` gives the sha256 above.
 5. Open a pull request to https://github.com/WebODM/WebODM-Plugins adding to `directory.json`'s `plugins`:
    ```json
    {
-       "url": "https://github.com/WinuxNomacs/webodm-geojson/releases/download/v1.0.0/geojson-1.0.0.zip",
-       "sha256": "a71c42c30329e1a63b266cd2d61dc3f30298c6906bf5b4b689e1b504b0731f7a"
+       "url": "https://github.com/WinuxNomacs/webodm-geojson/releases/download/v1.0.1/geojson-1.0.1.zip",
+       "sha256": "b030b4598a92d5418292c3a6488ab30e6c0a68c81a12536250159e977b8e177f"
    }
    ```
    (their rules: a single root folder with `manifest.json`, an OSI license; a download that fails or does not
