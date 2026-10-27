@@ -3,9 +3,7 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(2026-10-27: the port requested in `new.md`, planned the same day)
-1. **Port phase 1: the plugin and its library on official WebODM** (planned 2026-10-27, design under Port >
-   Phase 1). (Port)
+(nothing yet)
 
 **Then**
 (nothing yet)
@@ -16,6 +14,10 @@
 - **Autocomplete in the address search** (in LuxODM's "Up next", not built there yet). (Port)
 
 **Done**
+- **Port phase 1: the plugin and its library on official WebODM** — 2026-10-27. `geojson/` (`library.py` keeps
+  the library in the global data store under a lock; `api.py`, `boundary.py`, `plugin.py`, `public/`,
+  `templates/` from LuxODM), version 1.0.0. Tests: `geojson/tests/test_geojson.py` (29), `public/__tests__/` (94
+  Jest). Checked live on :8001 as an admin and a second user. (Port)
 - **Dev environment** — 2026-10-27. Upstream WebODM in dev mode beside LuxODM (`dev/webodm.sh`,
   `dev/compose.yml`), a Python 3.9 `.venv`, Ruff for 3.9, Jest, ESLint and Playwright (`package.json`,
   `eslint.config.mjs`). The skeleton plugin in `geojson/` registers in WebODM.
@@ -56,7 +58,7 @@
     3. **Python 3.9 / Django 2.2 / DRF 3.13 compatibility** in `api.py`, `boundary.py`, `plugin.py` and the
        tests. A first read finds no syntax newer than 3.9; Ruff (`target-version = "py39"`) checks it. The
        serializer moves from a `ModelSerializer` to a plain `Serializer` over the stored JSON.
-    4. **Tests move into the plugin** (`geojson/tests/`), run by `manage.py test coreplugins.geojson.tests` in
+    4. **Tests move into the plugin** (`geojson/tests/`), run by `manage.py test coreplugins.geojson.tests.test_geojson` in
        the dev container, instead of `app/tests/`.
     5. **Packaging:** the plugin is the `geojson/` folder (a zip with it as its single root folder, as the
        directory requires); the repo's dev tools stay outside it. MapLibre and terra-draw come from the
