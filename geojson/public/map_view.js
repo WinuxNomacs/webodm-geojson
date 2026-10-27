@@ -33,7 +33,7 @@
         function applyBasemap(bm) {
             if (map.getLayer("gj-basemap")) map.removeLayer("gj-basemap");
             if (map.getSource("gj-basemap")) map.removeSource("gj-basemap");
-            map.addSource("gj-basemap", Core.basemapSource(bm, win.location.protocol));
+            map.addSource("gj-basemap", Core.basemapSource(bm));
             // Under the drawing, whose layers terra-draw adds on top
             var layers = map.getStyle().layers;
             map.addLayer({id: "gj-basemap", type: "raster", source: "gj-basemap"}, layers.length ? layers[0].id : undefined);
