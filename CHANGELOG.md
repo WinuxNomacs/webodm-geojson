@@ -6,9 +6,16 @@
   on WebODM's Task Options hook (`addTaskOptionControl`). On a WebODM without the hook, nothing changes.
 - The editor's dialog over the options takes the focus, so that Escape closes it and not the options.
 
-## 1.0.1 — 2026-10-27
+## 1.0.2 — 2026-10-27
 
-The first published release, for WebODM 3.3.2 or later: 1.0.0 with one fix (1.0.0 itself was not published).
+The first published release, for WebODM 3.3.2 or later (1.0.0 and 1.0.1 were not published).
+
+- The editor takes WebODM's theme colors (Administration > Theme) instead of colors of its own: notes, errors,
+  borders, the active tool, the map's buttons and panels, the copy dialog.
+
+## 1.0.1 — 2026-10-27 (not published)
+
+1.0.0 with one fix.
 
 - Fixed: on a WebODM served over http, the editor's OpenStreetMap basemap stayed blank. Basemap URLs without a
   scheme (`//…`) now load over https.

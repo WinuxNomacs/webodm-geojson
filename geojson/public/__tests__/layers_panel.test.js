@@ -22,7 +22,8 @@ const click = el => el.dispatchEvent(new MouseEvent("click", {bubbles: true}));
 describe("layers button", () => {
     it("is a button on the map, closed at first", () => {
         make();
-        expect(panel.element.className).toContain("maplibregl-ctrl-group");
+        expect(panel.element.classList.contains("maplibregl-ctrl")).toBe(true);
+        expect(panel.element.className).toContain("theme-secondary theme-color-primary");
         expect(button().title).toBe("Map layers");
         expect(button().getAttribute("aria-expanded")).toBe("false");
         expect(panelEl().hidden).toBe(true);

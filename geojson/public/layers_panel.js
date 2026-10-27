@@ -6,7 +6,7 @@
     // Returns {element, setSelected(label), open(), close(), isOpen()}
     function createLayersPanel(doc, opts) {
         var element = doc.createElement("div");
-        element.className = "gj-layers-control maplibregl-ctrl maplibregl-ctrl-group";
+        element.className = "gj-layers-control gj-ctrl-group theme-secondary theme-color-primary maplibregl-ctrl";
 
         var button = doc.createElement("button");
         button.type = "button";
@@ -18,7 +18,7 @@
         element.appendChild(button);
 
         var panel = doc.createElement("div");
-        panel.className = "gj-layers-panel";
+        panel.className = "gj-layers-panel theme-secondary theme-color-primary";
         panel.hidden = true;
         element.appendChild(panel);
 
