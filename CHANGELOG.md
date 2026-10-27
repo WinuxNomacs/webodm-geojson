@@ -5,12 +5,17 @@
 - The "Create GeoJSON" and "Use existing" buttons beside a task's `boundary` option, for new and existing tasks,
   on WebODM's Task Options hook (`addTaskOptionControl`). On a WebODM without the hook, nothing changes.
 - The editor's dialog over the options takes the focus, so that Escape closes it and not the options.
+
+## 1.0.1 — 2026-10-27
+
+The first published release, for WebODM 3.3.2 or later: 1.0.0 with one fix (1.0.0 itself was not published).
+
 - Fixed: on a WebODM served over http, the editor's OpenStreetMap basemap stayed blank. Basemap URLs without a
   scheme (`//…`) now load over https.
 
-## 1.0.0 — 2026-10-27
+## 1.0.0 — 2026-10-27 (not published)
 
-The first release, for WebODM 3.3.2 or later, on the official plugin API.
+The first version, on the official plugin API.
 
 - The GeoJSON tab: the instance-wide library of boundaries and the editor (draw, import, edit the text, search
   with suggestions, download, save a copy, delete), with owners and admins.
