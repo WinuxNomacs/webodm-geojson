@@ -1,0 +1,12 @@
+{
+	"name": "GeoJSON",
+	"webodmMinVersion": "3.3.2",
+	"description": "Draw, import and save polygons for the boundary option of a task (Bounds & Cropping), in a library shared by everyone on the instance.",
+	"version": "0.0.1",
+	"author": "Winux Nomacs",
+	"repository": "https://github.com/WinuxNomacs/webodm-geojson",
+	"tags": ["geojson", "boundary", "crop"],
+	"homepage": "https://github.com/WinuxNomacs/webodm-geojson",
+	"experimental": true,
+	"deprecated": false
+}
