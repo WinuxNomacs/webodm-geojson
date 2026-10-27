@@ -3,7 +3,7 @@
 Draw, import and save polygons for the `boundary` option of a task (Bounds & Cropping), in a library shared by
 everyone on the WebODM instance. ODM crops a task's results to the boundary's outline.
 
-A port of [LuxODM](https://github.com/WinuxNomacs/LuxODM)'s GeoJSON plugin to the official WebODM plugin API.
+A port of LuxODM's GeoJSON plugin to the official WebODM plugin API.
 
 ## What it does
 
@@ -25,8 +25,8 @@ A port of [LuxODM](https://github.com/WinuxNomacs/LuxODM)'s GeoJSON plugin to th
 - **Use existing** opens the library.
 
 "Use for this task" fills the `boundary` option with the polygon. The buttons need a WebODM with the Task Options
-hook (`PluginsAPI.Dashboard.addTaskOptionControl`), proposed to WebODM and not yet in a
-release. Without it, the plugin works as before: download a boundary from the library and load it with the
+hook (`PluginsAPI.Dashboard.addTaskOptionControl`), proposed in
+[WebODM#2041](https://github.com/WebODM/WebODM/pull/2041) and not yet in a release. Without it, the plugin works as before: download a boundary from the library and load it with the
 option's import button.
 
 ## Requirements
