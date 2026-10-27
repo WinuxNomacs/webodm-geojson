@@ -1,5 +1,7 @@
 # GeoJSON plugin for WebODM
 
+![The GeoJSON editor in WebODM: a boundary around Central Park on OpenStreetMap, with its name, area, drawing tools and GeoJSON text](docs/banner.jpg)
+
 Draw, import and save polygons for the `boundary` option of a task (Bounds & Cropping), in a library shared by
 everyone on the WebODM instance. ODM crops a task's results to the boundary's outline.
 
