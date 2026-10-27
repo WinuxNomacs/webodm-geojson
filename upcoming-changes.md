@@ -83,6 +83,40 @@ Built and checked 2026-10-27 (Done: Release 1.0.0); nothing published yet.
    (their rules: a single root folder with `manifest.json`, an OSI license; a download that fails or does not
    match is skipped.)
 
+## Opening the WebODM pull requests (the user's steps, when ready)
+
+Built 2026-10-27 (Done: phase A); nothing pushed. As decided, open them once phase B (this plugin's controls on
+the hook) is built and checked on the PR branch, so the PR comes with a real plugin using it.
+1. **Ask Claude to bring the branches up to date** if upstream moved: fetch `origin`, rebase
+   `task-options-extensions` (and `task-options-hooks`) on the new master, rerun WebODM's Jest and the live check.
+2. **Review the changes** (you must be able to explain them, per WebODM's `CONTRIBUTING.md`):
+   `git -C ignored/WebODM log -p master..task-options-extensions` (2 commits: the `ApiFactory` fix, then the
+   hooks) and `git -C ignored/WebODM-Docs log -p main..task-options-hooks` (1 commit).
+3. **Fork** https://github.com/WebODM/WebODM and https://github.com/WebODM/Docs on GitHub.
+4. **Push the branches to the forks:**
+   ```sh
+   git -C ignored/WebODM remote add fork git@github.com:<your account>/WebODM.git
+   git -C ignored/WebODM push fork task-options-extensions
+   git -C ignored/WebODM-Docs remote add fork git@github.com:<your account>/Docs.git
+   git -C ignored/WebODM-Docs push fork task-options-hooks
+   ```
+5. **Open the WebODM PR by hand** (to `WebODM/WebODM` `master`), with a description in your own words:
+   - what it adds: three `Dashboard` hooks so any plugin can extend the Task Options of new and existing tasks
+     (a form row, an item at the top of the dialog, a control beside one option), with the task's context and
+     `taskOptions` to read and set options as the user would;
+   - that nothing changes without a plugin using them (no trigger, no markup), and each plugin component is
+     kept in an error boundary;
+   - the separate `ApiFactory` fix (replies lost when several triggers wait or a plugin's dependencies load
+     later; a listener left per trigger with no plugin), which they can take on its own;
+   - how it was tested: WebODM's Jest (55 suites, 81 tests), a live check of new and existing tasks with no
+     plugin and with an example plugin using every hook, and the GeoJSON plugin 1.1.0 built on it;
+   - **the AI disclosure** WebODM asks of new contributors: Claude Opus 5.5 (Claude Code) wrote the code, tests
+     and docs under your direction; you reviewed and tested them; and how long it took you.
+6. **Open the docs PR** (to `WebODM/Docs` `main`), linking the WebODM PR; it should merge after it.
+7. **Reach out** to WebODM's developers (#devtalk on Discord, https://webodm.org/community), with the PR link.
+8. **Afterwards:** give Claude the PR links; changes asked in review are made on the same branches, tested, and
+   pushed by you.
+
 ## Task Options hook
 
 - **A pull request to WebODM so the Task Options load extensions from installed plugins**: requested 2026-10-27
@@ -190,9 +224,7 @@ Built and checked 2026-10-27 (Done: Release 1.0.0); nothing published yet.
       the console has no errors. With it, every hook rendered in both flows, its values reached the review and the
       saved task (`crop`, `dsm`, `boundary`), and a control made to throw was left out with the dialog working.
       The example plugin, the check's task and the plugin row were removed afterwards.
-    - **For the user, before opening the PRs:** read the two commits; the PR description in your own words, with
-      the AI disclosure (Claude Opus 5.5 wrote the code, tests and docs; you reviewed and tested them) and how long
-      it took; fork WebODM and WebODM/Docs, push the branches, open the PRs and link them to each other.
+    - **For the user:** the steps are in "Opening the WebODM pull requests" below.
   - **Decided (the user, 2026-10-27):** build the pull request to a ready-to-publish state first, with this
     plugin's controls working on it (phase B on the PR branch, feature-detected); the user then opens the PR on
     GitHub and reaches out to WebODM's developers soon after.
