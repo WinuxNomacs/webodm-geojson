@@ -14,6 +14,13 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
    phase B)
 
 **Done**
+- **Release 1.0.2** — 2026-10-27, `release/1.0.2` from the 1.0.1 release (69eaadc) with `theme-colors`: the
+  editor in WebODM's theme colors (the user, 2026-10-27: "fix it first to support theme colors", before the
+  WebODM-Plugins PR, whose guidance asks plugins not to hard-code colors). `geojson.css` names no colors; the
+  markup has WebODM's theme classes; the map's zoom, layers and search buttons are the plugin's own control
+  group. Tests: Jest 95, Django 34. Checked live on the Default theme and a temporary dark theme (removed
+  afterwards), then the zip installed through WebODM's plugin upload and the live check passed on it. 1.0.1
+  is not published: replaced by 1.0.2. (Release)
 - **Release 1.0.1** — 2026-10-27, `release/1.0.1` from the 1.0.0 release (da665a4): 1.0.0 with the http
   basemap fix, the first published release (the user, 2026-10-27: "I don't want to release 1.0.0"; the boundary
   buttons stay for 1.1.0). `CHANGELOG.md`, `README.md` (the buttons described as coming in 1.1.0), the manifest.
@@ -81,21 +88,25 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
       other entries do). The README is kept current with every feature change from now on (`CLAUDE.md`).
     - `experimental`: `false`.
 
-## Publishing 1.0.1 (the user's steps, when ready)
+## Publishing 1.0.2 (the user's steps, when ready)
 
-Built and checked 2026-10-27 (Done: Release 1.0.1). 1.0.0 is not published: no tag, no GitHub release.
+Built and checked 2026-10-27 (Done: Release 1.0.2). 1.0.0 and 1.0.1 are not published: no tags, no GitHub
+releases.
 1. Make the repo public. **Done 2026-10-27.**
-2. Push `main`; tag `v1.0.1` on the merge of `release/1.0.1` into `main` and push the tag.
-3. Create the GitHub release v1.0.1 with `CHANGELOG.md`'s 1.0.1 entry, and attach `dist/geojson-1.0.1.zip`
-   exactly as built: sha256 `b030b4598a92d5418292c3a6488ab30e6c0a68c81a12536250159e977b8e177f`. The zip
+2. Push `main`; tag `v1.0.2` on the last commit of `release/1.0.2` (not its merge into `main`, which also has
+   the boundary buttons for 1.1.0), and push the tag.
+3. Create the GitHub release v1.0.2 with `CHANGELOG.md`'s 1.0.2 entry, and attach `dist/geojson-1.0.2.zip`
+   exactly as built: sha256 `f7f0198eacb5967904b5f9bb3b1ce6414aebdc9ce529999134108d9c106092ca`. The zip
    carries the commit's timestamps, so a rebuild after another commit has another sha256; if `dist/` is lost,
-   rebuild it at a0617fa, the commit it was built from (`git worktree add`, `dev/package.sh`) and use the new sha256 below.
+   rebuild it at 9c69ef9, the commit it was built from (`git worktree add`, `dev/package.sh`) and use the new
+   sha256 below.
 4. Check the download: `curl -sL <url> | sha256sum` gives the sha256 above.
-5. Open a pull request to https://github.com/WebODM/WebODM-Plugins adding to `directory.json`'s `plugins`:
+5. Open a pull request to https://github.com/WebODM/WebODM-Plugins adding to `directory.json`'s `plugins`
+   (**prepared 2026-10-27:** branch `add-geojson` in `ignored/WebODM-Plugins`):
    ```json
    {
-       "url": "https://github.com/WinuxNomacs/webodm-geojson/releases/download/v1.0.1/geojson-1.0.1.zip",
-       "sha256": "b030b4598a92d5418292c3a6488ab30e6c0a68c81a12536250159e977b8e177f"
+       "url": "https://github.com/WinuxNomacs/webodm-geojson/releases/download/v1.0.2/geojson-1.0.2.zip",
+       "sha256": "f7f0198eacb5967904b5f9bb3b1ce6414aebdc9ce529999134108d9c106092ca"
    }
    ```
    (their rules: a single root folder with `manifest.json`, an OSI license; a download that fails or does not
