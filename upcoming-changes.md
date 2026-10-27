@@ -5,7 +5,12 @@
 **Up next**
 (2026-10-27: the user's order: the WebODM pull request ready to publish, then the plugin's controls on it; the
 user opens the PR on GitHub and contacts WebODM's developers once it is ready)
-(nothing: the user opens the WebODM pull requests, "Opening the WebODM pull requests" below)
+(nothing to build: waiting, as of 2026-10-27, on
+- WebODM#2041 (the Task Options hooks): open, no review yet; review changes go on `task-options-extensions`
+  in `ignored/WebODM`;
+- WebODM-Plugins#1 (1.0.2 in the plugin directory): open, waiting for a merge;
+- the docs PR (the user's step 6 in "Opening the WebODM pull requests" below): not opened yet.
+Upstream WebODM master and Docs main had not moved, so no rebase was needed.)
 
 **Later**
 1. **Release 1.1.0** once a WebODM release has the Task Options hook: `release/1.1.0` (manifest version,
