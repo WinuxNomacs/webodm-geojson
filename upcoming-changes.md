@@ -58,6 +58,27 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
       other entries do). The README is kept current with every feature change from now on (`CLAUDE.md`).
     - `experimental`: `false`.
 
+## Publishing 1.0.0 (the user's steps, when ready)
+
+Built and checked 2026-10-27 (Done: Release 1.0.0); nothing published yet.
+1. Make the repo public (`CLAUDE.md` and this plan are written to be public). The README links to LuxODM's repo:
+   if that one stays private, remove the link first.
+2. Push `main`; tag `v1.0.0` on the merge of `release/1.0.0` (da665a4) and push the tag.
+3. Create the GitHub release v1.0.0 with `CHANGELOG.md`'s 1.0.0 entry, and attach `dist/geojson-1.0.0.zip`
+   exactly as built: sha256 `a71c42c30329e1a63b266cd2d61dc3f30298c6906bf5b4b689e1b504b0731f7a`. The zip
+   carries the commit's timestamps, so a rebuild after another commit has another sha256; if `dist/` is lost,
+   rebuild it at da665a4 (`git worktree add`, `dev/package.sh`) and use the new sha256 below.
+4. Check the download: `curl -sL <url> | sha256sum` gives the sha256 above.
+5. Open a pull request to https://github.com/WebODM/WebODM-Plugins adding to `directory.json`'s `plugins`:
+   ```json
+   {
+       "url": "https://github.com/WinuxNomacs/webodm-geojson/releases/download/v1.0.0/geojson-1.0.0.zip",
+       "sha256": "a71c42c30329e1a63b266cd2d61dc3f30298c6906bf5b4b689e1b504b0731f7a"
+   }
+   ```
+   (their rules: a single root folder with `manifest.json`, an OSI license; a download that fails or does not
+   match is skipped.)
+
 ## Task Options hook
 
 - **A pull request to WebODM so the Task Options load extensions from installed plugins**: requested 2026-10-27
