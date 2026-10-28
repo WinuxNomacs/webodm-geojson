@@ -43,32 +43,31 @@ const React = {createElement: (type, props, ...children) => ({type, props, child
 
 describe("the control the Task Options hook renders", () => {
     const env = {React, doc: document};
-    // The buttons a boundary control renders with the hook's props
-    function render(props) {
-        const Control = controlFor({option: {name: "boundary", type: "string", domain: "json"}, context: props.context}, env);
-        return Control(props).children[0];
-    }
+    // The hook's args for the boundary option of a new task
+    const hookArgs = over => ({option: {name: "boundary", type: "string", domain: "json"}, getValue: () => undefined,
+                               setValue: () => {}, task: null, getPhotoPositions: () => [], ...over});
 
     test("only the boundary option gets a control", () => {
-        expect(controlFor({option: {name: "crop"}, context: {}}, env)).toBeNull();
+        expect(controlFor(hookArgs({option: {name: "crop"}}), env)).toBeNull();
         expect(controlFor({}, env)).toBeNull();
-        expect(typeof controlFor({option: {name: "boundary"}, context: {}}, env)).toBe("function");
+        expect(controlFor(hookArgs(), env).props.className).toBe("gj-option-buttons");
     });
 
     test("it renders the two buttons, each with its icon and label", () => {
-        const buttons = render({value: undefined, setValue: () => {}, context: {mode: "new"}});
+        const buttons = controlFor(hookArgs(), env).children[0];
         expect(buttons.map(b => b.type)).toEqual(["button", "button"]);
         expect(buttons.map(b => b.children[1])).toEqual([" Create GeoJSON", " Use existing"]);
         expect(buttons.map(b => b.children[0].props.className)).toEqual(["fa fa-draw-polygon", "fa fa-folder-open"]);
         expect(buttons.every(b => b.props.type === "button")).toBe(true);
     });
 
-    test("a button opens the editor on the option's value, and using a boundary sets it with the control's setValue", async () => {
+    test("a button opens the editor on the option's value, and using a boundary sets it with the hook's setValue", async () => {
         document.body.innerHTML = '<div class="modal"><button id="b"></button></div>';
-        const setValue = jest.fn(), editor = fakeEditor(), context = {mode: "new", getPhotoPositions: () => [[11, 46]]};
-        const Control = controlFor({option: {name: "boundary"}, context},
+        const setValue = jest.fn(), editor = fakeEditor();
+        const control = controlFor(hookArgs({getValue: () => JSON.stringify(Core.featureCollection(SQUARE)), setValue,
+                                             getPhotoPositions: () => [[11, 46]]}),
             {...env, win: window, editor, load: () => Promise.resolve(), fetchFn: () => answer(200, [])});
-        const create = Control({value: JSON.stringify(Core.featureCollection(SQUARE)), setValue, context}).children[0][0];
+        const create = control.children[0][0];
         const click = {preventDefault: jest.fn(), currentTarget: document.getElementById("b")};
         create.props.onClick(click);
         await flush();
@@ -249,8 +248,9 @@ describe("registering with WebODM", () => {
         load();
         expect(addTaskOptionControl).toHaveBeenCalledTimes(1);
         const answer = addTaskOptionControl.mock.calls[0][0];
-        expect(answer({option: {name: "crop"}, context: {}})).toBeNull();
-        expect(answer({option: {name: "boundary"}, context: {}})({value: undefined, setValue: () => {}, context: {}}).children[0]
+        expect(answer({option: {name: "crop"}})).toBeNull();
+        expect(answer({option: {name: "boundary"}, getValue: () => undefined, setValue: () => {}, task: null,
+                       getPhotoPositions: () => []}).children[0]
             .map(b => b.children[1])).toEqual([" Create GeoJSON", " Use existing"]);
     });
 

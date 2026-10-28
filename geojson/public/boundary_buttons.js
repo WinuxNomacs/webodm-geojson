@@ -175,23 +175,21 @@
                 {label: "Use existing", icon: "fa fa-folder-open", title: "Choose a boundary from the GeoJSON library", onClick: open("library")}];
     }
 
-    // The answer to the Task Options hook, asked with {option, context} for each option: for the boundary, a
-    // component that WebODM renders after the option's input with {value, setValue, context}
+    // The answer to the Task Options hook, asked for each option with {option, getValue, setValue, task,
+    // getPhotoPositions}: for the boundary, the buttons that WebODM shows after the option's input
     function controlFor(args, env) {
         var buttons = buttonsFor(args && args.option && args.option.name, env);
         if (!buttons) return null;
-        return function GeoJsonBoundaryButtons(props) {
-            var h = env.React.createElement;
-            return h("span", {className: "gj-option-buttons"}, buttons.map(function (button) {
-                return h("button", {key: button.label, type: "button", className: "btn btn-default", title: button.title,
-                                    onClick: function (e) {
-                                        e.preventDefault();
-                                        button.onClick({element: e.currentTarget, getValue: function () { return props.value; },
-                                                        setValue: props.setValue, taskContext: props.context || {}});
-                                    }},
-                         h("i", {className: button.icon}), " " + button.label);
-            }));
-        };
+        var h = env.React.createElement;
+        return h("span", {className: "gj-option-buttons"}, buttons.map(function (button) {
+            return h("button", {key: button.label, type: "button", className: "btn btn-default", title: button.title,
+                                onClick: function (e) {
+                                    e.preventDefault();
+                                    button.onClick({element: e.currentTarget, getValue: args.getValue, setValue: args.setValue,
+                                                    taskContext: args});
+                                }},
+                     h("i", {className: button.icon}), " " + button.label);
+        }));
     }
 
     var api = {buttonsFor: buttonsFor, controlFor: controlFor, openDialog: openDialog, taskLayers: taskLayers,
