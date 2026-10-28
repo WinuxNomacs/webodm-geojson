@@ -3,10 +3,13 @@
 ## Phases (current and upcoming)
 
 **Up next**
+1. **One Task Options hook (review of #2041)**: cut the PR down to `addTaskOptionControl` alone, as WebODM's
+   developer asked. (Task Options hook, "Review: one hook")
+
 (2026-10-27: the user's order: the WebODM pull request ready to publish, then the plugin's controls on it; the
 user opens the PR on GitHub and contacts WebODM's developers once it is ready)
-(nothing to build: waiting, as of 2026-10-27, on
-- WebODM#2041 (the Task Options hooks): open, no review yet; review changes go on `task-options-extensions`
+(waiting, as of 2026-10-27, on
+- WebODM#2041 (the Task Options hooks): reviewed, see phase 1; review changes go on `task-options-extensions`
   in `ignored/WebODM`;
 - WebODM-Plugins#1 (1.0.2 in the plugin directory): open, waiting for a merge;
 - WebODM/Docs#11 (the plugin guide's how-to, to merge after #2041): open, no review yet; review changes go on
@@ -297,6 +300,32 @@ same branches; a rebase would need `git push --force-with-lease`.
     so Escape reached the button under it and closed the options' modal instead; it
     now focuses the dialog and gives the focus back to its button. The two buttons wrap together in the narrow
     options dialog.
+  - **Review: one hook** (2026-10-27). WebODM's developer on #2041: "I think this can be much, much simpler?
+    Like, a single hook for task options to add extra buttons? I'm not sure about sending context (or the choice
+    of context sent), why is it needed?" The user disagrees that one hook is better in the long run, and asked
+    to address the concerns. Claude's assessment, which the user accepted ("do it"):
+    - Right on scope: only `addTaskOptionControl` has a user (this plugin). The two other hooks and the
+      `taskOptions` functions (with the "(Custom)" preset code) are API without a user, kept forever.
+    - Context is needed, but only two pieces of it: the task being edited (null for a new one: this plugin shows
+      its orthophoto and boundary) and, for a new task, the photos' positions (only the browser has them before
+      upload). The other eight fields go.
+    - What avoids the smells the user expects from one hook is its shape, not the count: a component (not button
+      descriptions), one object for args and one for props (new fields later break nothing), a name for one place.
+      Another place gets its own hook when a plugin needs it: one line in `Dashboard.js`.
+  - **Design:**
+    - `Dashboard.addTaskOptionControl` only. Args `{option}`; props `{option, value, setValue, task,
+      getPhotoPositions}` (`task` null for a new task; `getPhotoPositions()` `[]` for an existing one). Rendered
+      beside each option's input in the Edit Task Options dialog, in an error boundary, and only when a plugin
+      listens (no trigger, no markup otherwise).
+    - Removed: `addTaskOptionsFormItem`, `addTaskOptionsPanelItem`, `taskOptions`, `setCustomPresetOptions`, the
+      other context fields and the props carrying them (`getFiles`, `filesCount`).
+    - The `ApiFactory` fix stays as the first commit (still needed: one trigger per option), offered as its own
+      PR if the developer prefers.
+    - New commits on `task-options-extensions` and `task-options-hooks` (no rebase, no force-push). The docs
+      how-to cut to the one hook. This plugin's `boundary_buttons.js` reads `task` and `getPhotoPositions`
+      from the props (was `context`); the "Unreleased" entry in `CHANGELOG.md` unchanged in substance.
+    - Tests: WebODM's Jest (the removed hooks' tests go), this plugin's Jest and Django, the docs examples run as
+      written, a live check of a new and an existing task with the plugin and with no plugin.
 
 ## First version (1.0.0)
 
