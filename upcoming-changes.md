@@ -4,7 +4,7 @@
 
 **Up next**
 (nothing to build: the user's steps after the review changes (Done: "One Task Options hook"), with the texts
-Claude drafted: push `task-options-extensions` (at 32d8e18c) and `task-options-hooks` (at 42d0558) to the forks
+Claude drafted: push `task-options-extensions` (at 2b0d7a95) and `task-options-hooks` (at 42d0558) to the forks
 (new commits, no force-push needed), reply on #2041, replace #2041's and Docs#11's descriptions, link Docs#11
 from #2041 (in the new description), then step 7.)
 
@@ -33,7 +33,12 @@ from #2041, then step 7, reach out to WebODM's developers.)
   `{option, getValue, setValue, task, getPhotoPositions}` and showing the elements returned, like
   `addNewTaskButton`; `TaskOptionsPluginItems`, the two other hooks, `taskOptions` and the other context fields
   removed; the PR is +213 −16 in 9 files (65 lines of code outside the tests). No error boundary any more: none
-  of WebODM's other hooks has one. WebODM's Jest: 54 suites, 70 tests. Docs: a commit on `task-options-hooks`
+  of WebODM's other hooks has one. WebODM's Jest: 54 suites, 69 tests. Then (2026-10-28, the user: "ensure the
+  unit tests included are actually necessary and purposeful"), each test was run against the bug it covers
+  (the old `ApiFactory`, the code removed): a test of several triggers passed on the old `ApiFactory` and a
+  no-plugin test compared the new markup with itself, both removed; the dialog's test checks what a plugin can
+  do there, not the props passed down; a test added for a control that comes after the option is gone
+  (2b0d7a95). The plugin's hook tests check behaviour, not markup (element types, icons). Docs: a commit on `task-options-hooks`
   (42d0558), the section cut to the one hook (the PR +58). Plugin: `boundary_buttons.js` builds its buttons
   from the args; Jest 121, Django and Ruff pass. Checked live on :8001: a new task (the buttons only beside
   `boundary`, the photos on the editor's map, Escape, "Use existing" set the value, saved with the task) and
