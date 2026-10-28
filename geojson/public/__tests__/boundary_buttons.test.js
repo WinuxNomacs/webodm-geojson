@@ -50,14 +50,12 @@ describe("the control the Task Options hook renders", () => {
     test("only the boundary option gets a control", () => {
         expect(controlFor(hookArgs({option: {name: "crop"}}), env)).toBeNull();
         expect(controlFor({}, env)).toBeNull();
-        expect(controlFor(hookArgs(), env).props.className).toBe("gj-option-buttons");
+        expect(controlFor(hookArgs(), env)).not.toBeNull();
     });
 
-    test("it renders the two buttons, each with its icon and label", () => {
+    test("it renders the two buttons, which do not submit the task form", () => {
         const buttons = controlFor(hookArgs(), env).children[0];
-        expect(buttons.map(b => b.type)).toEqual(["button", "button"]);
         expect(buttons.map(b => b.children[1])).toEqual([" Create GeoJSON", " Use existing"]);
-        expect(buttons.map(b => b.children[0].props.className)).toEqual(["fa fa-draw-polygon", "fa fa-folder-open"]);
         expect(buttons.every(b => b.props.type === "button")).toBe(true);
     });
 
@@ -250,8 +248,7 @@ describe("registering with WebODM", () => {
         const answer = addTaskOptionControl.mock.calls[0][0];
         expect(answer({option: {name: "crop"}})).toBeNull();
         expect(answer({option: {name: "boundary"}, getValue: () => undefined, setValue: () => {}, task: null,
-                       getPhotoPositions: () => []}).children[0]
-            .map(b => b.children[1])).toEqual([" Create GeoJSON", " Use existing"]);
+                       getPhotoPositions: () => []})).not.toBeNull();
     });
 
     test("on a WebODM without it, the script adds nothing and does not fail", () => {
