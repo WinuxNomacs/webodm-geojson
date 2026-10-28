@@ -9,8 +9,10 @@ user opens the PR on GitHub and contacts WebODM's developers once it is ready)
 - WebODM#2041 (the Task Options hooks): open, no review yet; review changes go on `task-options-extensions`
   in `ignored/WebODM`;
 - WebODM-Plugins#1 (1.0.2 in the plugin directory): open, waiting for a merge;
-- the docs PR (the user's step 6 in "Opening the WebODM pull requests" below): not opened yet.
-Upstream WebODM master and Docs main had not moved, so no rebase was needed.)
+- WebODM/Docs#11 (the plugin guide's how-to, to merge after #2041): open, no review yet; review changes go on
+  `task-options-hooks` in `ignored/WebODM-Docs`.
+Upstream WebODM master and Docs main had not moved, so no rebase was needed. Still the user's: link Docs#11
+from #2041, then step 7, reach out to WebODM's developers.)
 
 **Later**
 1. **Release 1.1.0** once a WebODM release has the Task Options hook: `release/1.1.0` (manifest version,
@@ -130,9 +132,10 @@ moved; the user forked both repos and pushed the branches, public for review: `t
 bf5f9502 on https://github.com/WinuxNomacs/WebODM (remote `fork`) and `task-options-hooks` at a4f1986 on
 https://github.com/WinuxNomacs/Docs (remote `fork`). The user is reviewing them with WebODM's lead developer
 (who recommended client-side hooks, which these are). **Step 5 done 2026-10-27:** the user opened
-https://github.com/WebODM/WebODM/pull/2041 (its "Test Docker" check waits for a maintainer's approval); next,
-the docs PR (step 6), linked from #2041. Review
-changes before then: new commits on the same branches; a rebase would need `git push --force-with-lease`.
+https://github.com/WebODM/WebODM/pull/2041 (its "Test Docker" check waits for a maintainer's approval).
+**Step 6 done 2026-10-27:** the user opened https://github.com/WebODM/Docs/pull/11 (`task-options-hooks` at
+a4f1986, on Docs main e8ea85a); next, a link to it from #2041, then step 7. Review changes: new commits on the
+same branches; a rebase would need `git push --force-with-lease`.
 1. **Ask Claude to bring the branches up to date** if upstream moved: fetch `origin`, rebase
    `task-options-extensions` (and `task-options-hooks`) on the new master, rerun WebODM's Jest and the live check.
 2. **Review the changes** (you must be able to explain them, per WebODM's `CONTRIBUTING.md`):
