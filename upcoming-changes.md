@@ -3,15 +3,17 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: the user publishes 1.1.0 ("Publishing 1.1.0" below); the user tells WebODM's developer on #2043 that the plugin works on it (Done: "The buttons on
-#2043's hook"), and decides what becomes of Docs#11, whose guide still describes #2041's `addTaskOptionControl`.)
+(nothing to build: 1.1.0 is published (Done: "Release 1.1.0"). Still the user's: what becomes of Docs#11, whose
+guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
 
-(waiting, as of 2026-10-28, on
-- WebODM#2043 (pierotofy's `presetDialogOptionsReady`, made from #2041, which he closed): open. The dev
+(waiting, as of 2026-10-29, on
+- WebODM#2043 (pierotofy's `presetDialogOptionsReady`, made from #2041, which he closed): open, "good to go"
+  (pierotofy, 2026-10-29); the user told him the plugin works on it and 1.1.0 uses the hook. Its head is still
+  c4d1e292, the commit 1.1.0 was checked on. The dev
   checkout `ignored/WebODM` is on its branch, `pr-2043` (c4d1e292), so :8001 runs it. #2041's branch
   `task-options-extensions` is kept but no longer used. WebODM's developer, on #2041: "no unit tests from AI
   please": none in anything for WebODM itself;
-- WebODM-Plugins#1 (1.0.2 in the plugin directory): open, waiting for a merge;
+- WebODM-Plugins#1 (the plugin in the directory): open at 172df21, now 1.1.0, waiting for a merge;
 - WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
 
 **Later**
@@ -130,7 +132,9 @@
 
 ## Publishing 1.1.0 (the user's steps)
 
-Built and checked 2026-10-28 (Done: Release 1.1.0).
+Built and checked 2026-10-28 (Done: Release 1.1.0). **All done 2026-10-29:** `v1.1.0` tagged, the GitHub
+release https://github.com/WinuxNomacs/webodm-geojson/releases/tag/v1.1.0 with the zip, WebODM-Plugins#1
+pushed at 172df21 (the 1.1.0 entry).
 1. Push `main`; tag `v1.1.0` on f68edad (the last commit of `release/1.1.0`) and push the tag.
 2. Create the GitHub release v1.1.0 with `CHANGELOG.md`'s 1.1.0 entry, and attach `dist/geojson-1.1.0.zip`
    exactly as built: sha256 `e03624a7a2bb66d669da2f963b0c8fe6818ccfacc0a91c0690418c0fd17c4737`. If `dist/` is
