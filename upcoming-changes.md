@@ -3,21 +3,16 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: the user's steps after the review changes (Done: "One Task Options hook"), with the texts
-Claude drafted: push `task-options-extensions` (at 2b0d7a95) and `task-options-hooks` (at 42d0558) to the forks
-(new commits, no force-push needed), reply on #2041, replace #2041's and Docs#11's descriptions, link Docs#11
-from #2041 (in the new description), then step 7.)
+(nothing to build: the user tells WebODM's developer on #2043 that the plugin works on it (Done: "The buttons on
+#2043's hook"), and decides what becomes of Docs#11, whose guide still describes #2041's `addTaskOptionControl`.)
 
-(2026-10-27: the user's order: the WebODM pull request ready to publish, then the plugin's controls on it; the
-user opens the PR on GitHub and contacts WebODM's developers once it is ready)
-(waiting, as of 2026-10-27, on
-- WebODM#2041 (the Task Options hook): reviewed, changes made (not pushed yet); further review changes go on
-  `task-options-extensions` in `ignored/WebODM`;
+(waiting, as of 2026-10-28, on
+- WebODM#2043 (pierotofy's `presetDialogOptionsReady`, made from #2041, which he closed): open. The dev
+  checkout `ignored/WebODM` is on its branch, `pr-2043` (c4d1e292), so :8001 runs it. #2041's branch
+  `task-options-extensions` is kept but no longer used. WebODM's developer, on #2041: "no unit tests from AI
+  please": none in anything for WebODM itself;
 - WebODM-Plugins#1 (1.0.2 in the plugin directory): open, waiting for a merge;
-- WebODM/Docs#11 (the plugin guide's how-to, to merge after #2041): open, no review yet; review changes go on
-  `task-options-hooks` in `ignored/WebODM-Docs`.
-Upstream WebODM master and Docs main had not moved, so no rebase was needed. Still the user's: link Docs#11
-from #2041, then step 7, reach out to WebODM's developers.)
+- WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
 
 **Later**
 1. **Release 1.1.0** once a WebODM release has the Task Options hook: `release/1.1.0` (manifest version,
@@ -28,6 +23,16 @@ from #2041, then step 7, reach out to WebODM's developers.)
    without the hook, the user chose to wait: the hook's API can still change in review.)
 
 **Done**
+- **The buttons on #2043's hook** — 2026-10-28. WebODM's developer closed #2041 and opened #2043 from it: one
+  `Dashboard.presetDialogOptionsReady` trigger when the options dialog opens (again on a switch between grouped
+  and flat view), with `{task, getExifData, options}` (`options`: each option's component, with `getValue()`
+  and `setValue()`), answered with `{controls: {optionName: element}}`. `boundary_buttons.js`: `controlsFor`
+  adapts those args to the buttons' own, `exifPositions` turns EXIF data into the photos' positions; the
+  plugin no longer registers on `addTaskOptionControl`. README and changelog name the new hook. Tests: Jest
+  124, Django, Ruff, ESLint. Checked live on :8001 running #2043: a new task (buttons only beside `boundary`,
+  kept on switching to flat view and back, the photos on the map, Escape, "Use existing" set the value, saved
+  with the task) and an existing one (the buttons, its value in the editor, `task` given, no EXIF data). The
+  two tasks were removed. (Task Options hook)
 - **One Task Options hook (review of #2041)** — 2026-10-27, as WebODM's developer asked. WebODM: a commit on
   `task-options-extensions` (32d8e18c): `addTaskOptionControl` alone, asked by each `ProcessingNodeOption` with
   `{option, getValue, setValue, task, getPhotoPositions}` and showing the elements returned, like
