@@ -1,6 +1,6 @@
 global.GeoJsonCore = require('../geojson_core');
 const Core = global.GeoJsonCore;
-const { buttonsFor, controlFor, taskLayers, shotPositions, csrfToken } = require('../boundary_buttons');
+const { buttonsFor, controlFor, controlsFor, taskLayers, shotPositions, csrfToken } = require('../boundary_buttons');
 
 const SQUARE = [[11, 46], [11.001, 46], [11.001, 46.001], [11, 46.001]];
 const flush = () => new Promise(r => setTimeout(r, 0));
@@ -234,21 +234,53 @@ test("the CSRF token is read from its cookie", () => {
     expect(csrfToken({cookie: ""})).toBe("");
 });
 
+describe("the answer to the Task Options hook", () => {
+    const env = {React, doc: document};
+    // An option's component, as WebODM gives it: its value, read and set
+    const fakeOption = value => ({getValue: () => value, setValue: v => { value = v; }});
+
+    test("without a boundary option on the processing node, it adds nothing", () => {
+        expect(controlsFor({task: null, getExifData: () => [], options: {crop: fakeOption()}}, env)).toBeNull();
+    });
+
+    test("the buttons read and set the boundary option's own value", async () => {
+        document.body.innerHTML = '<div class="modal"><button id="b"></button></div>';
+        const editor = fakeEditor(), boundary = fakeOption(JSON.stringify(Core.featureCollection(SQUARE)));
+        const reply = controlsFor({task: null, getExifData: () => [], options: {boundary}},
+            {...env, win: window, editor, load: () => Promise.resolve(), fetchFn: () => answer(200, [])});
+        reply.controls.boundary.children[0][0].props.onClick({preventDefault: () => {}, currentTarget: document.getElementById("b")});
+        await flush();
+        expect(editor.ctx.start.ring).toEqual(SQUARE);
+        editor.ctx.use.onUse(Core.featureCollection([[1, 1], [2, 1], [2, 2]]));
+        expect(JSON.parse(boundary.getValue())).toEqual(Core.featureCollection([[1, 1], [2, 1], [2, 2]]));
+    });
+
+    test("a new task's map shows the photos that have a GPS position", async () => {
+        document.body.innerHTML = '<div class="modal"><button id="b"></button></div>';
+        const editor = fakeEditor();
+        const exif = [{image: {name: "a.jpg"}, gps: {latitude: 46, longitude: 11, altitude: 300}}, {image: {name: "b.jpg"}, gps: null}];
+        const reply = controlsFor({task: null, getExifData: () => exif, options: {boundary: fakeOption()}},
+            {...env, win: window, editor, load: () => Promise.resolve(), fetchFn: () => answer(200, [])});
+        reply.controls.boundary.children[0][0].props.onClick({preventDefault: () => {}, currentTarget: document.getElementById("b")});
+        await flush();
+        expect(editor.ctx.points).toEqual([[11, 46]]);
+    });
+});
+
 describe("registering with WebODM", () => {
     afterEach(() => { delete window.PluginsAPI; delete window.React; delete window.fetch; });
     const load = () => jest.isolateModules(() => require('../boundary_buttons'));
 
     test("on a WebODM with the Task Options hook, the boundary option gets the buttons", () => {
-        const addTaskOptionControl = jest.fn();
-        window.PluginsAPI = {Dashboard: {addTaskOptionControl}};
+        const presetDialogOptionsReady = jest.fn();
+        window.PluginsAPI = {Dashboard: {presetDialogOptionsReady}};
         window.React = React;
         window.fetch = jest.fn();
         load();
-        expect(addTaskOptionControl).toHaveBeenCalledTimes(1);
-        const answer = addTaskOptionControl.mock.calls[0][0];
-        expect(answer({option: {name: "crop"}})).toBeNull();
-        expect(answer({option: {name: "boundary"}, getValue: () => undefined, setValue: () => {}, task: null,
-                       getPhotoPositions: () => []})).not.toBeNull();
+        expect(presetDialogOptionsReady).toHaveBeenCalledTimes(1);
+        const answer = presetDialogOptionsReady.mock.calls[0][0];
+        expect(answer({task: null, getExifData: () => [], options: {boundary: {getValue: () => undefined, setValue: () => {}}}})
+            .controls.boundary).not.toBeNull();
     });
 
     test("on a WebODM without it, the script adds nothing and does not fail", () => {
