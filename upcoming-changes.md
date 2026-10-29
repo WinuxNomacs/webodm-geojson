@@ -3,13 +3,15 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: 1.1.1 is published (Done: "Release 1.1.1"). Still the user's: what
-becomes of Docs#11, whose guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
+(nothing to build: 1.1.1 is published (Done: "Release 1.1.1"). Docs#11 is rewritten for #2043's hook
+(`task-options-hooks` 003ea28 in `ignored/WebODM-Docs`, a new commit on top, tested on 3.3.2): the user
+pushes it and updates the PR's title and description and adds a comment.)
 
 (waiting, as of 2026-10-29, on
 - WebODM-Plugins#2 (the directory entry to 1.1.1, branch `geojson-1.1.1` from upstream `main`): open. #1 was
   merged 2026-10-29 at 1.1.0 (675d9a8), so WebODM's plugin directory lists 1.1.0 until #2 merges;
-- WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
+- WebODM/Docs#11 (the plugin guide's how-to): open, no review; the pushed branch still describes #2041's hook
+  until 003ea28 is pushed.)
 
 **Later**
 (nothing planned)
