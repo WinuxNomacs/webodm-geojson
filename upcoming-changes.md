@@ -3,11 +3,12 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: 1.1.1 is ready for the user to tag and publish (Done: "Release 1.1.1"). Still the user's: what
+(nothing to build: 1.1.1 is published (Done: "Release 1.1.1"). Still the user's: what
 becomes of Docs#11, whose guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
 
 (waiting, as of 2026-10-29, on
-- WebODM-Plugins#1 (the plugin in the directory): open, at 1.1.0 (172df21); 1.1.1 committed on `add-geojson` (0595878) for the user to push once the release exists;
+- WebODM-Plugins#2 (the directory entry to 1.1.1, branch `geojson-1.1.1` from upstream `main`): open. #1 was
+  merged 2026-10-29 at 1.1.0 (675d9a8), so WebODM's plugin directory lists 1.1.0 until #2 merges;
 - WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
 
 **Later**
@@ -27,6 +28,8 @@ becomes of Docs#11, whose guide describes #2041's `addTaskOptionControl`, not #2
   Release check: zip sha256 4af0ee8604a2af60e1661a50719200233c02df012e6e15c074a94097a27ffd4d, wrong sha256
   refused, npm installed maplibre-gl 6.16.0 in the installed copy, `.mjs` served as `text/javascript`; live: the
   library, a second user who can only copy, the buttons. Everything made was removed; library "Home", "Fremd".
+  Published 2026-10-29 by Claude, on the user's word ("push the tag, release and pr"): tag `v1.1.1` (annotated, on
+  11c1568), GitHub release with the zip (the download's sha256 checked), WebODM-Plugins#2.
 - **WebODM 3.3.2 released with the hook** — 2026-10-29. #2043 merged (5a0ec41e, the same code as c4d1e292, which
   1.1.0 was checked on) and tagged `v3.3.2`; the `3.3.2` images are new builds (the old pin was a pre-release
   build also called 3.3.2, without the hook). `dev/compose.yml` pins the new webapp and NodeODX images,
