@@ -23,8 +23,8 @@ on one machine. Keep it short; edit in place.
 ## Dev environment
 
 - `ignored/WebODM` is a checkout of https://github.com/WebODM/WebODM (ignored by git), at the commit the pinned
-  image was built from (3.3.2). The dev server runs that checkout, so a branch there (the Task Options PR,
-  `task-options-extensions`) is live on :8001; `ignored/WebODM-Docs` is https://github.com/WebODM/Docs (the
+  image was built from (tag `v3.3.2`). The dev server runs that checkout, so a branch checked out there (a PR to
+  WebODM) is live on :8001; `ignored/WebODM-Docs` is https://github.com/WebODM/Docs (the
   plugin guide).
 - `dev/webodm.sh up | down | logs [service] | ps` runs it in dev mode with `geojson/` mounted as
   `/webodm/coreplugins/geojson`, on http://localhost:8001, containers `gj-webapp`, `gj-worker`, `gj-db`,

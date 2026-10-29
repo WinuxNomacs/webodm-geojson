@@ -25,10 +25,10 @@ everyone on the WebODM instance. ODM crops a task's results to the boundary's ou
   its photo positions and orthophoto), starting from the boundary the task already has;
 - **Use existing** opens the library.
 
-"Use for this task" fills the `boundary` option with the polygon. The buttons need a WebODM with the Task Options
-hook (`PluginsAPI.Dashboard.presetDialogOptionsReady`), proposed in
-[WebODM#2043](https://github.com/WebODM/WebODM/pull/2043) and not yet in a release. Without it, the plugin works as before: download a boundary from the library and load it with the
-option's import button.
+"Use for this task" fills the `boundary` option with the polygon. The buttons use WebODM's Task Options hook
+(`PluginsAPI.Dashboard.presetDialogOptionsReady`, added in WebODM 3.3.2 by
+[WebODM#2043](https://github.com/WebODM/WebODM/pull/2043)). On a WebODM without it, the plugin works as before:
+download a boundary from the library and load it with the option's import button.
 
 ## Requirements
 

@@ -2,8 +2,8 @@
 
 ## 1.1.0 — 2026-10-28
 
-For WebODM 3.3.2 or later. The new buttons need a WebODM with the Task Options hook, proposed in
-[WebODM#2043](https://github.com/WebODM/WebODM/pull/2043) and not yet in a release.
+For WebODM 3.3.2 or later. The new buttons use the Task Options hook that WebODM 3.3.2 added
+([WebODM#2043](https://github.com/WebODM/WebODM/pull/2043)).
 
 - The "Create GeoJSON" and "Use existing" buttons beside a task's `boundary` option, for new and existing tasks,
   on WebODM's Task Options hook (`presetDialogOptionsReady`). On a WebODM without the hook, nothing changes.
