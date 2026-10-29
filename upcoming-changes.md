@@ -3,7 +3,7 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: the user tells WebODM's developer on #2043 that the plugin works on it (Done: "The buttons on
+(nothing to build: the user publishes 1.1.0 ("Publishing 1.1.0" below); the user tells WebODM's developer on #2043 that the plugin works on it (Done: "The buttons on
 #2043's hook"), and decides what becomes of Docs#11, whose guide still describes #2041's `addTaskOptionControl`.)
 
 (waiting, as of 2026-10-28, on
@@ -15,14 +15,18 @@
 - WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
 
 **Later**
-1. **Release 1.1.0** once a WebODM release has the Task Options hook: `release/1.1.0` (manifest version,
-   `webodmMinVersion` left at 3.3.2 since the buttons are feature-detected, `CHANGELOG.md`'s "Unreleased" entry
-   dated, the README naming the WebODM version with the hook), then the release check. (Task Options hook,
-   phase B)
-   (2026-10-27: asked whether to release now, since the buttons are feature-detected and safe on WebODM
-   without the hook, the user chose to wait: the hook's API can still change in review.)
+(nothing planned)
 
 **Done**
+- **Release 1.1.0** — 2026-10-28, `release/1.1.0` (f68edad) from `main`: the boundary buttons on #2043's hook.
+  The user, 2026-10-28: "publish the latest version of the plugin so it's available before the webodm
+  release" (on 2026-10-27 they had chosen to wait for it). `webodmMinVersion` stays 3.3.2: the buttons appear
+  only on a WebODM with the hook, and if #2043 renames it before merging, they stay hidden until a 1.1.1.
+  Manifest and `CHANGELOG.md` (1.1.0, naming #2043); the README already did. Tests: Jest 124, Django 35 (with
+  WebODM's plugin tests), Ruff, ESLint. The zip installed through Administration > Plugins on :8001 running
+  #2043 (a wrong sha256 refused, npm ran in the installed copy); live: the library, drawing, import, save,
+  search suggestions, a second user who can only copy, and the buttons on a new task. What the check made was
+  removed, the installed copy uninstalled and `geojson/` mounted again. (Release)
 - **The buttons on #2043's hook** — 2026-10-28. WebODM's developer closed #2041 and opened #2043 from it: one
   `Dashboard.presetDialogOptionsReady` trigger when the options dialog opens (again on a switch between grouped
   and flat view), with `{task, getExifData, options}` (`options`: each option's component, with `getValue()`
@@ -123,6 +127,18 @@
     - This repo is made public at release; the zip is attached to its v1.0.0 GitHub release (as the directory's
       other entries do). The README is kept current with every feature change from now on (`CLAUDE.md`).
     - `experimental`: `false`.
+
+## Publishing 1.1.0 (the user's steps)
+
+Built and checked 2026-10-28 (Done: Release 1.1.0).
+1. Push `main`; tag `v1.1.0` on f68edad (the last commit of `release/1.1.0`) and push the tag.
+2. Create the GitHub release v1.1.0 with `CHANGELOG.md`'s 1.1.0 entry, and attach `dist/geojson-1.1.0.zip`
+   exactly as built: sha256 `e03624a7a2bb66d669da2f963b0c8fe6818ccfacc0a91c0690418c0fd17c4737`. If `dist/` is
+   lost, rebuild it at f68edad (`git worktree add`, `dev/package.sh`): the sha256 changes, so use the new one.
+3. Check the download: `curl -sL <url> | sha256sum` gives the sha256 above.
+4. WebODM-Plugins#1 is not merged yet: its entry moves to 1.1.0 (**prepared 2026-10-28:** commit 172df21 on
+   `add-geojson` in `ignored/WebODM-Plugins`), pushed to the fork after step 3:
+   `git -C ignored/WebODM-Plugins push fork add-geojson`.
 
 ## Publishing 1.0.2 (the user's steps, when ready)
 
