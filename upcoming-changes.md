@@ -7,7 +7,7 @@
 becomes of Docs#11, whose guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
 
 (waiting, as of 2026-10-29, on
-- WebODM-Plugins#1 (the plugin in the directory): open at 172df21, at 1.1.0; to be moved to 1.1.1 by the user;
+- WebODM-Plugins#1 (the plugin in the directory): open, at 1.1.0 (172df21); 1.1.1 committed on `add-geojson` (0595878) for the user to push once the release exists;
 - WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
 
 **Later**
