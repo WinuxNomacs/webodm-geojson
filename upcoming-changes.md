@@ -7,12 +7,6 @@
 guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
 
 (waiting, as of 2026-10-29, on
-- WebODM#2043 (pierotofy's `presetDialogOptionsReady`, made from #2041, which he closed): open, "good to go"
-  (pierotofy, 2026-10-29); the user told him the plugin works on it and 1.1.0 uses the hook. Its head is still
-  c4d1e292, the commit 1.1.0 was checked on. The dev
-  checkout `ignored/WebODM` is on its branch, `pr-2043` (c4d1e292), so :8001 runs it. #2041's branch
-  `task-options-extensions` is kept but no longer used. WebODM's developer, on #2041: "no unit tests from AI
-  please": none in anything for WebODM itself;
 - WebODM-Plugins#1 (the plugin in the directory): open at 172df21, now 1.1.0, waiting for a merge;
 - WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
 
@@ -20,6 +14,11 @@ guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
 (nothing planned)
 
 **Done**
+- **WebODM 3.3.2 released with the hook** — 2026-10-29. #2043 merged (5a0ec41e, the same code as c4d1e292, which
+  1.1.0 was checked on) and tagged `v3.3.2`; the `3.3.2` images are new builds (the old pin was a pre-release
+  build also called 3.3.2, without the hook). `dev/compose.yml` pins the new webapp and NodeODX images,
+  `ignored/WebODM` is at `v3.3.2`; README and CHANGELOG say the hook is in 3.3.2. 1.1.0 needs no new release.
+  WebODM's developer, on #2041: "no unit tests from AI please": none in anything for WebODM itself.
 - **Release 1.1.0** — 2026-10-28, `release/1.1.0` (f68edad) from `main`: the boundary buttons on #2043's hook.
   The user, 2026-10-28: "publish the latest version of the plugin so it's available before the webodm
   release" (on 2026-10-27 they had chosen to wait for it). `webodmMinVersion` stays 3.3.2: the buttons appear
