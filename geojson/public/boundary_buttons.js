@@ -2,7 +2,7 @@
 // options and in Edit Task Options). Each opens the editor in a dialog over the options, with the task's photos (and
 // its orthophoto, once processed) on the map; "Use for this task" fills the option with the polygon. The editor's
 // scripts are loaded the first time a dialog opens. Loaded on every page (plugin.py's include_js_files); it adds the
-// buttons only on a WebODM with the Task Options hook (PluginsAPI.Dashboard.addTaskOptionControl).
+// buttons only on a WebODM with the Task Options hook (PluginsAPI.Dashboard.presetDialogOptionsReady).
 (function (root) {
     var PUBLIC = "/plugins/geojson/", API = "/api/plugins/geojson/";
     var STYLES = ["node_modules/maplibre-gl/dist/maplibre-gl.css"];
@@ -175,8 +175,7 @@
                 {label: "Use existing", icon: "fa fa-folder-open", title: "Choose a boundary from the GeoJSON library", onClick: open("library")}];
     }
 
-    // The answer to the Task Options hook, asked for each option with {option, getValue, setValue, task,
-    // getPhotoPositions}: for the boundary, the buttons that WebODM shows after the option's input
+    // The boundary's buttons, given {option, getValue, setValue, task, getPhotoPositions}
     function controlFor(args, env) {
         var buttons = buttonsFor(args && args.option && args.option.name, env);
         if (!buttons) return null;
@@ -192,14 +191,32 @@
         }));
     }
 
-    var api = {buttonsFor: buttonsFor, controlFor: controlFor, openDialog: openDialog, taskLayers: taskLayers,
-               shotPositions: shotPositions, csrfToken: csrfToken};
+    // [longitude, latitude] of each photo with a position, from WebODM's EXIF data of a new task's photos
+    function exifPositions(exifData) {
+        return (exifData || []).filter(function (exif) { return exif && exif.gps; })
+            .map(function (exif) { return [exif.gps.longitude, exif.gps.latitude]; });
+    }
+
+    // The answer to the Task Options hook, asked when the options dialog opens with {task, getExifData, options}
+    // (options: each option's component, by name): the buttons to show after the boundary's input
+    function controlsFor(args, env) {
+        var option = args && args.options && args.options.boundary;
+        if (!option) return null;
+        var control = controlFor({option: {name: "boundary"}, task: args.task || null,
+                                  getValue: function () { return option.getValue(); },
+                                  setValue: function (value) { option.setValue(value); },
+                                  getPhotoPositions: function () { return exifPositions(args.getExifData ? args.getExifData() : []); }}, env);
+        return {controls: {boundary: control}};
+    }
+
+    var api = {buttonsFor: buttonsFor, controlFor: controlFor, controlsFor: controlsFor, exifPositions: exifPositions,
+               openDialog: openDialog, taskLayers: taskLayers, shotPositions: shotPositions, csrfToken: csrfToken};
     root.GeoJsonBoundaryButtons = api;
     if (typeof module !== "undefined" && module.exports) module.exports = api;
 
-    if (root.PluginsAPI && root.PluginsAPI.Dashboard && root.PluginsAPI.Dashboard.addTaskOptionControl) {
-        root.PluginsAPI.Dashboard.addTaskOptionControl(function (args) {
-            return controlFor(args, {doc: root.document, win: root, fetchFn: root.fetch.bind(root), React: root.React});
+    if (root.PluginsAPI && root.PluginsAPI.Dashboard && root.PluginsAPI.Dashboard.presetDialogOptionsReady) {
+        root.PluginsAPI.Dashboard.presetDialogOptionsReady(function (args) {
+            return controlsFor(args, {doc: root.document, win: root, fetchFn: root.fetch.bind(root), React: root.React});
         });
     }
 })(typeof window !== "undefined" ? window : {});

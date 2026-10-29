@@ -26,8 +26,8 @@ everyone on the WebODM instance. ODM crops a task's results to the boundary's ou
 - **Use existing** opens the library.
 
 "Use for this task" fills the `boundary` option with the polygon. The buttons need a WebODM with the Task Options
-hook (`PluginsAPI.Dashboard.addTaskOptionControl`), proposed in
-[WebODM#2041](https://github.com/WebODM/WebODM/pull/2041) and not yet in a release. Without it, the plugin works as before: download a boundary from the library and load it with the
+hook (`PluginsAPI.Dashboard.presetDialogOptionsReady`), proposed in
+[WebODM#2043](https://github.com/WebODM/WebODM/pull/2043) and not yet in a release. Without it, the plugin works as before: download a boundary from the library and load it with the
 option's import button.
 
 ## Requirements
