@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.1 — 2026-10-29
+
+For WebODM 3.3.2 or later.
+
+- Security: MapLibre 5.24.0 -> 6.16.0. MapLibre up to 6.4.0 could let a script through in a basemap's
+  attribution text ([GHSA-jrc7-96c5-q579](https://github.com/advisories/GHSA-jrc7-96c5-q579)); the editor shows the attributions of WebODM's basemaps.
+- The editor's map now needs a browser with WebGL2 and ES2022 (any current one).
+
 ## 1.1.0 — 2026-10-28
 
 For WebODM 3.3.2 or later. The new buttons use the Task Options hook that WebODM 3.3.2 added
