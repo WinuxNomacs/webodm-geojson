@@ -3,8 +3,9 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: 1.1.0 is published (Done: "Release 1.1.0"). Still the user's: what becomes of Docs#11, whose
-guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
+1. **MapLibre 6 (1.1.1)**: Dependabot alert #1, an XSS in MapLibre's attribution sanitizer, fixed only in 6.4.1+.
+   See "MapLibre 6" below. (Docs#11's fate is still the user's: its guide describes #2041's
+   `addTaskOptionControl`, not #2043's hook.)
 
 (waiting, as of 2026-10-29, on
 - WebODM-Plugins#1 (the plugin in the directory): open at 172df21, now 1.1.0, waiting for a merge;
@@ -211,6 +212,48 @@ same branches; a rebase would need `git push --force-with-lease`.
 7. **Reach out** to WebODM's developers (#devtalk on Discord, https://webodm.org/community), with the PR link.
 8. **Afterwards:** give Claude the PR links; changes asked in review are made on the same branches, tested, and
    pushed by you.
+
+## MapLibre 6
+
+The request (2026-10-29, the user, on Dependabot's alerts: plan the upgrade): Dependabot alert #1 (critical):
+maplibre-gl <= 6.4.0 sanitizes attribution HTML with a loop that skips the attribute after each one it removes, so
+`<details open onload=.. ontoggle=..>` keeps its handler and runs when the attribution control renders it. The
+plugin passes each basemap's `attribution` to MapLibre (`geojson_core.js` `basemapSource`); those come from
+WebODM's admin-configured basemaps and the built-in OpenStreetMap entry, so only an admin (or whoever can change
+the basemaps) could plant one. No 5.x has the fix (5.24.0 is the last).
+
+Alerts #2-#23 are Django 2.2.27 and DRF 3.13.1 in `requirements-dev.txt`: host-only, for the IDE, pinned to
+WebODM's own versions on purpose; not in the zip, nothing serves from them. Not upgraded (the IDE would then
+show APIs WebODM lacks); to be dismissed as "vulnerable code is not actually used".
+
+Design:
+- `maplibre-gl` 5.24.0 -> 6.16.0 (exact pin, lock file). terra-draw 1.35.0 and the adapter 1.4.1 stay: the
+  adapter does not load MapLibre (only `terra-draw` is its UMD dependency) and uses only public map methods
+  (`addSource`, `addLayer`, `moveLayer`, `project`, `unproject`, `getCanvas`, `dragPan`, one-argument `setData`),
+  none removed in 6. Its peer range is `maplibre-gl >= 4`.
+- 6 is ESM only: `dist/maplibre-gl.js` is gone, replaced by `maplibre-gl.mjs` (+ `-shared.mjs`, and
+  `-worker.mjs` loaded by URL next to it). A small module `geojson/public/maplibre.mjs` imports it and sets
+  `window.maplibregl`, so the ES5 scripts keep using the global:
+  - `templates/editor.html`: `<script type="module" src="maplibre.mjs">`, and the other scripts get `defer`
+    (deferred and module scripts run in document order, after parsing), so `geojson_editor.js` still finds
+    `maplibregl` when it starts;
+  - `boundary_buttons.js`'s loader (Task Options): the same file as a `type="module"` script; a module script's
+    `load` fires after it has run, so the chain continues as now.
+  - ESLint: an entry for `*.mjs` as a module (the ES5 rules stay for the rest).
+- Served as `text/javascript`: WebODM's Python maps `.mjs` through `/etc/mime.types` (checked in the 3.3.2
+  container), and its nginx includes the same `mime.types`. Checked live, not assumed.
+- 6 needs WebGL2 and an ES2022 browser: README's Requirements says so.
+- Release 1.1.1 (patch: a security fix, no feature change; `webodmMinVersion` stays 3.3.2), with the
+  `release-check` skill.
+
+Tests: Jest and Django as they are (the map is faked in Jest); the change is in loading, so the proof is live:
+the library page and the Task Options buttons on :8001, both opening the editor with basemaps, the attribution,
+the orthophoto and photo layers, drawing, import, search, save, no console errors (other than the dev
+livereload). And one check that a basemap attribution like the advisory's `<details open onload ontoggle>`
+does not run (a temporary basemap in WebODM's admin, removed after).
+
+Decided (the user, 2026-10-29): Claude dismisses #2-#23 with `gh`. Done the same day, as "not_used" with that
+reason; only #1 is open.
 
 ## Task Options hook
 
