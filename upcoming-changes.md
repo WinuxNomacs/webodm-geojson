@@ -3,18 +3,30 @@
 ## Phases (current and upcoming)
 
 **Up next**
-1. **MapLibre 6 (1.1.1)**: Dependabot alert #1, an XSS in MapLibre's attribution sanitizer, fixed only in 6.4.1+.
-   See "MapLibre 6" below. (Docs#11's fate is still the user's: its guide describes #2041's
-   `addTaskOptionControl`, not #2043's hook.)
+(nothing to build: 1.1.1 is ready for the user to tag and publish (Done: "Release 1.1.1"). Still the user's: what
+becomes of Docs#11, whose guide describes #2041's `addTaskOptionControl`, not #2043's hook.)
 
 (waiting, as of 2026-10-29, on
-- WebODM-Plugins#1 (the plugin in the directory): open at 172df21, now 1.1.0, waiting for a merge;
+- WebODM-Plugins#1 (the plugin in the directory): open at 172df21, at 1.1.0; to be moved to 1.1.1 by the user;
 - WebODM/Docs#11 (the plugin guide's how-to): open, no review; describes #2041's hook, not #2043's.)
 
 **Later**
 (nothing planned)
 
 **Done**
+- **Release 1.1.1 (MapLibre 6)** — 2026-10-29, `maplibre-6` (46231a7) and `release/1.1.1` (11c1568) from `main`.
+  Dependabot alert #1 (GHSA-jrc7-96c5-q579, XSS through attribution HTML in maplibre-gl <= 6.4.0): maplibre-gl
+  6.16.0. `geojson/public/maplibre.mjs` imports the ES module and sets `window.maplibregl`; `editor.html` loads it as
+  a module with the other scripts `defer`red; `boundary_buttons.js`'s loader gives `.mjs` files `type="module"`.
+  ESLint has an entry for `*.mjs`. README: WebGL2 and ES2022 browsers. npm in `geojson/public` has to run in the
+  container (`docker exec -w /webodm/coreplugins/geojson/public gj-webapp npm install`): `node_modules` is root's;
+  on the host only `--package-lock-only`. Proof: the advisory's `<details open onload ontoggle>` runs on 5.24.0 and
+  not on 6.16.0 (standalone page), and not in the plugin through a temporary WebODM basemap (removed). Tests:
+  Jest 124, Django 35, Ruff, ESLint. Live: the library (draw, import, save, search, attribution), the Task Options
+  buttons for a new and an existing task; not checked: a processed task's orthophoto layer (none on :8001).
+  Release check: zip sha256 4af0ee8604a2af60e1661a50719200233c02df012e6e15c074a94097a27ffd4d, wrong sha256
+  refused, npm installed maplibre-gl 6.16.0 in the installed copy, `.mjs` served as `text/javascript`; live: the
+  library, a second user who can only copy, the buttons. Everything made was removed; library "Home", "Fremd".
 - **WebODM 3.3.2 released with the hook** — 2026-10-29. #2043 merged (5a0ec41e, the same code as c4d1e292, which
   1.1.0 was checked on) and tagged `v3.3.2`; the `3.3.2` images are new builds (the old pin was a pre-release
   build also called 3.3.2, without the hook). `dev/compose.yml` pins the new webapp and NodeODX images,
