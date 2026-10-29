@@ -19,6 +19,12 @@ export default [
         rules: {...js.configs.recommended.rules, "no-unused-vars": ["error", {caughtErrors: "none"}]},
     },
     {
+        // maplibre.mjs: the one ES module, which hands MapLibre 6 to the ES5 scripts
+        files: ["geojson/public/*.mjs"],
+        ...js.configs.recommended,
+        languageOptions: {ecmaVersion: 2022, sourceType: "module", globals: globals.browser},
+    },
+    {
         files: ["geojson/public/__tests__/**/*.js", "tools/**/*.js"],
         ...js.configs.recommended,
         languageOptions: {ecmaVersion: 2022, sourceType: "commonjs", globals: {...globals.browser, ...globals.node, ...globals.jest}},

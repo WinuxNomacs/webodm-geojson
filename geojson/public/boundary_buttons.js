@@ -6,7 +6,7 @@
 (function (root) {
     var PUBLIC = "/plugins/geojson/", API = "/api/plugins/geojson/";
     var STYLES = ["node_modules/maplibre-gl/dist/maplibre-gl.css"];
-    var SCRIPTS = ["node_modules/maplibre-gl/dist/maplibre-gl.js", "node_modules/terra-draw/dist/terra-draw.umd.js",
+    var SCRIPTS = ["maplibre.mjs", "node_modules/terra-draw/dist/terra-draw.umd.js",
                    "node_modules/terra-draw-maplibre-gl-adapter/dist/terra-draw-maplibre-gl-adapter.umd.js",
                    "geojson_core.js", "layers_panel.js", "search_panel.js", "map_view.js", "geojson_editor.js"];
 
@@ -67,7 +67,8 @@
         return m ? decodeURIComponent(m[1]) : "";
     }
 
-    // The editor's styles and scripts, one after the other (each needs the ones before it); once per page
+    // The editor's styles and scripts, one after the other (each needs the ones before it); once per page. A module
+    // script's load comes after it has run, as a classic one's does
     var assetsLoaded = null;
     function loadAssets(doc) {
         if (assetsLoaded) return assetsLoaded;
@@ -81,6 +82,7 @@
             return previous.then(function () {
                 return new Promise(function (resolve, reject) {
                     var script = doc.createElement("script");
+                    if (/\.mjs$/.test(src)) script.type = "module";
                     script.src = PUBLIC + src;
                     script.onload = resolve;
                     script.onerror = function () { reject(new Error("Could not load " + src)); };
