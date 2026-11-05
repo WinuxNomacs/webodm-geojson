@@ -5,17 +5,20 @@ description: Run the GeoJSON plugin's checks (Ruff, ESLint, Jest, Django tests i
 
 # Tests and checks
 
-From the repo root, with the dev stack up (`dev/webodm.sh ps`; start it with `dev/webodm.sh up`):
+From the repo root, with the dev stack up (`dev/webodm.sh ps`; start it with `dev/webodm.sh up`). The default
+stack is WebODM 4.0.0 (`gj-webapp`, :8001); before a merge, the Django tests also run on 3.3.2
+(`GJ_WEBODM=3.3.2 dev/webodm.sh up`, `gj3-webapp`, :8004).
 
-1. **Ruff** (Python 3.9 syntax and lint): `.venv/bin/ruff check .`
+1. **Ruff** (Python 3.9 syntax, the oldest WebODM's, and lint): `.venv/bin/ruff check .`
 2. **ESLint** (the ES5 scripts in `geojson/public`): `npm run lint -- geojson`
 3. **Jest**: `npm test` (add a path or `-t "<name>"` to run fewer).
 4. **Django**: `docker exec -w /webodm gj-webapp python manage.py test --noinput coreplugins.geojson.tests.test_geojson`.
-   Before a merge, also WebODM's plugin tests: `app.tests.test_plugins`. Never two Django runs at once: they
-   share the test database.
+   Before a merge, also WebODM's plugin tests: `app.tests.test_plugins`, and both again in `gj3-webapp`
+   (3.3.2). Never two Django runs at once on one stack: they share its test database.
    A test run starts WebODM in test mode, which adds a `test` plugin row to the dev database; until the webapp
    restarts, Administration > Plugins fails (500). Remove the row afterwards:
-   `docker exec -w /webodm gj-webapp python manage.py shell -c "from app.plugins.functions import sync_plugin_db; sync_plugin_db()"`.
+   `docker exec -w /webodm gj-webapp python manage.py shell -c "from app.plugins.functions import sync_plugin_db; sync_plugin_db()"`
+   (in `gj3-webapp` after a 3.3.2 run).
 5. **WebODM's own Jest** (for changes to `ignored/WebODM`): `docker exec -w /webodm gj-webapp npx jest`. Some
    suites need the UI mocks first: `docker exec -w /webodm gj-webapp python manage.py test app.tests.test_generate_ui_mocks --noinput`
    (the label must come first).

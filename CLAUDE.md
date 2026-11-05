@@ -11,7 +11,9 @@ on one machine. Keep it short; edit in place.
 - **Official plugin rules only** (https://docs.webodm.org/plugin-development-guide): no Django models or
   migrations (data goes in the plugin's data stores), only the `PluginsAPI` hooks WebODM has, no changes to
   WebODM itself.
-- **Python 3.9 and Django 2.2** (WebODM 3.3.2): Ruff targets py39.
+- **WebODM 3.3.2 and 4.0.0 both**: 3.3.2 is Python 3.9, Django 2.2, DRF 3.13, Postgres 9.5 with PostGIS; 4.0.0 is
+  Python 3.14, Django 5.2, DRF 3.18, Postgres 18 without GIS. The plugin's code runs unchanged on both: Ruff
+  targets py39 (the oldest), and every change is tested on both stacks before a merge.
 - **Never push and never tag.** Nothing is published by a push yet (no CI). A release: Claude prepares a
   `release/X.Y.Z` branch (manifest version, `CHANGELOG.md`, `README.md`), builds the zip with `dev/package.sh`
   (`dist/geojson-X.Y.Z.zip` and its sha256), runs the `release-check` skill and merges; the user tags `vX.Y.Z`,
@@ -23,14 +25,18 @@ on one machine. Keep it short; edit in place.
 ## Dev environment
 
 - `ignored/WebODM` is a checkout of https://github.com/WebODM/WebODM (ignored by git), at the commit the pinned
-  image was built from (tag `v3.3.2`). The dev server runs that checkout, so a branch checked out there (a PR to
-  WebODM) is live on :8001; `ignored/WebODM-Docs` is https://github.com/WebODM/Docs (the
-  plugin guide).
-- `dev/webodm.sh up | down | logs [service] | ps` runs it in dev mode with `geojson/` mounted as
+  image was built from (tag `v4.0.0`), and `ignored/WebODM-3.3.2` a worktree of it at `v3.3.2`
+  (`git -C ignored/WebODM worktree add ../WebODM-3.3.2 v3.3.2`). The dev servers run those checkouts, so a branch
+  checked out there (a PR to WebODM) is live. `ignored/WebODM-Docs` is https://github.com/WebODM/Docs (the plugin
+  guide).
+- `dev/webodm.sh up | down | logs [service] | ps` runs WebODM 4.0.0 in dev mode with `geojson/` mounted as
   `/webodm/coreplugins/geojson`, on http://localhost:8001, containers `gj-webapp`, `gj-worker`, `gj-db`,
-  `gj-broker`, `gj-node-odx-1`, project and volumes `webodm-geojson`, so it runs beside another WebODM. Images
-  are pinned by digest in `dev/compose.yml` (a local `webodm/webodm_webapp:latest` tag may be a fork's build).
-- The first start runs WebODM's dev setup (npm install, webpack) for several minutes before the server answers.
+  `gj-broker`, `gj-node-odx-1`, project and volumes `webodm-geojson`, so it runs beside another WebODM.
+  `GJ_WEBODM=3.3.2 dev/webodm.sh ...` runs 3.3.2 alike on http://localhost:8004, containers `gj3-*`, project and
+  volumes `webodm-geojson-332`. Each version's images are pinned by digest in `dev/webodm.sh` (a local
+  `webodm/webodm_webapp:latest` tag may be a fork's build).
+- The first start runs WebODM's dev setup (npm install, webpack, migrations) for several minutes before the server
+  answers. WebODM 4.0.0's first start on a 3.x database upgrades it to Postgres 18 in place, one way.
 - Host tools: `uv venv --python 3.9 .venv && uv pip install -r requirements-dev.txt` (Django, DRF and pyproj
   for the IDE, Ruff); `npm install` (Jest, ESLint, Playwright). VSCode: interpreter `.venv`, `ignored/WebODM` on
   Pylance's extra paths (local `.vscode/settings.json`).
@@ -39,8 +45,13 @@ on one machine. Keep it short; edit in place.
 
 The `test`, `live-check` and `release-check` skills in `.claude/skills` have the steps.
 
-- Django: `docker exec -w /webodm gj-webapp python manage.py test --noinput coreplugins.geojson.tests.test_geojson`. One run
-  at a time: every run uses the same test database.
+- Django: `docker exec -w /webodm gj-webapp python manage.py test --noinput coreplugins.geojson.tests.test_geojson`
+  (4.0.0) and, before a merge, the same in `gj3-webapp` (3.3.2). One run at a time per stack: a stack's runs share
+  its test database (the two stacks' are separate).
 - Jest: `npm test` at the repo root (jsdom). ESLint: `npm run lint -- geojson` (the scripts in `public/` are ES5).
 - Ruff: `.venv/bin/ruff check .`
-- Live checks: headless Playwright (Node) against http://localhost:8001 with a dev account from the user.
+- Live checks: headless Playwright (Node) against http://localhost:8001 (4.0.0) and http://localhost:8004 (3.3.2)
+  with a dev account from the user.
+- WebODM's Django CSRF check applies to the plugin's API (WebODM routes it through a plain Django view, in both
+  versions): a POST, PATCH or DELETE needs the session's CSRF token even with basic or JWT authentication, so
+  scripts change the library through a logged-in browser session.

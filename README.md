@@ -32,7 +32,7 @@ download a boundary from the library and load it with the option's import button
 
 ## Requirements
 
-WebODM 3.3.2 or later. The editor's map (MapLibre 6) needs a browser with WebGL2 and ES2022: any current
+WebODM 3.3.2 or later, including 4.0.0. The editor's map (MapLibre 6) needs a browser with WebGL2 and ES2022: any current
 Chrome, Edge, Firefox or Safari.
 
 ## Installing
