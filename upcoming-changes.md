@@ -3,23 +3,7 @@
 ## Phases (current and upcoming)
 
 **Up next**
-- **WebODM 4.0.0** (the user, 2026-11-05: "WebODM released 4.0.0 and we need to make sure geojson plugin fully
-  supports the update"). 4.0.0 (tag `v4.0.0`, 2026-11-04, 42 commits after 3.3.2): Ubuntu 24.04, **Python 3.14,
-  Django 5.2, DRF 3.18**, Postgres 18 without PostGIS, Valkey in place of Redis, WebODM's own JWT auth, a vendored
-  tiler (`app.vendor.rio_tiler`), plugin URLs through `re_path`, rewritten Administration templates.
-  Read against the plugin: unchanged are `plugin_base.py`, `data_store.py`, `functions.py`, the plugin page
-  template `app/plugins/templates/base.html`, `Dashboard.js` (`presetDialogOptionsReady`), `app/tests/classes.py`;
-  `Basemap.get_cached_basemaps` and pyproj (3.8.0) are still there; `PluginDatum.json_value` moves from
-  `contrib.postgres`'s JSONField to `models.JSONField` (jsonb both); the tiler's `orthophoto/metadata` keeps
-  `statistics`, `percentiles`, `bounds.value`, `minzoom`/`maxzoom` (what `boundary_buttons.js` reads). The dev
-  stack changes: `docker-compose.nodeodm.yml` is `docker-compose.nodeodx.yml`, db image 18 (upgrades 9.5 data in
-  place, one way), the dev compose's venv in an anonymous volume a new image must not reuse.
-  Decided (the user, 2026-11-05): the plugin supports **both 3.3.2 and 4.0.0** (`webodmMinVersion` stays 3.3.2,
-  Python 3.9 code, tests on both stacks, as webodm-dji-thermal does); the :8001 dev data is **copied** to volumes
-  `webodm-geojson-332_*` for a 3.3.2 stack (:8004, `gj3-*`) and then **upgraded in place** by 4.0.0 on :8001; a
-  processed task's orthophoto in the editor (never checked live) is checked with a **public ODM sample dataset**
-  processed on the dev stacks. No release if `geojson/` needs no change (1.1.1 already installs on 4.0.0); else
-  1.1.2.
+(nothing to build.)
 
 (WebODM-Plugins#2, the directory entry to 1.1.1, was merged 2026-10-29.)
 
@@ -27,6 +11,37 @@
 (nothing planned)
 
 **Done**
+- **WebODM 4.0.0** — 2026-11-05, `webodm-4.0.0` from `main` (the user: "WebODM released 4.0.0 and we need to make
+  sure geojson plugin fully supports the update"). 4.0.0 (tag `v4.0.0`, 2026-11-04): Python 3.14, Django 5.2,
+  DRF 3.18, Postgres 18 without PostGIS, Valkey, WebODM's own JWT auth, a vendored tiler, plugin URLs through
+  `re_path`, rewritten Administration templates. **No change to `geojson/` was needed, so no release**: 1.1.1
+  (`webodmMinVersion` 3.3.2) installs and works on 4.0.0. Decided (the user, 2026-11-05): both 3.3.2 and 4.0.0
+  supported; the dev data copied, then upgraded; a processed task checked with a public sample.
+  - Dev stack: `dev/webodm.sh` runs 4.0.0 (`ignored/WebODM` at `v4.0.0`, :8001, `gj-*`) or, with
+    `GJ_WEBODM=3.3.2`, 3.3.2 (the worktree `ignored/WebODM-3.3.2`, :8004, `gj3-*`, project `webodm-geojson-332`),
+    images pinned by digest per version (checked against Docker Hub's `4.0.0`, `18`, `9.1-alpine` and nodeodx
+    `latest` tags); the node is defined in `dev/compose.yml` (WebODM renamed its node file); `up` renews the
+    anonymous volumes (the image's venv). The :8001 volumes were copied to `webodm-geojson-332_*` first; 4.0.0's
+    first start upgraded them from Postgres 9.5 to 18 (the 9.5 data kept as `backup-9.5` in the volume) and ran
+    the migrations: the library (Home, Fremd: ids, owners, areas, dates) is the same on both.
+  - Tests: Ruff, ESLint, Jest 124; Django `test_geojson` and `app.tests.test_plugins` (35) pass on 4.0.0 and on
+    3.3.2. On 3.3.2 the first run after the stack's first start had 1 failure whose output was not kept; the next
+    3 full runs and 5 runs of `test_geojson` passed.
+  - Live, on both: the library (search, open, draw a rectangle, edit the text, import, a line refused, search
+    suggestions, basemap tiles), a second user (owner note, Delete disabled, DELETE 403, Save copy); Task Options
+    on a new task (24 photos of `OpenDroneMap/odm_data_aukerman` on the editor's map from EXIF, the buttons once
+    beside `boundary`, "Use for this task" filled it, the task created with it, Fast Orthophoto) and on that task
+    processed (orthophoto metadata and tiles 200, shots read, the editor starting from the task's boundary, Escape
+    closing only the editor). First live check of a processed task's orthophoto (also on 3.3.2).
+  - Installed as users do on 4.0.0: GeoJSON 1.1.1 from Administration > Plugins > Install Plugins (WebODM's
+    directory), "installed successfully", files identical to the release zip, npm installed maplibre-gl 6.16.0;
+    the live check passed on it; removed with the row's delete button, `geojson/` mounted again.
+  - Found, in both versions (not new): WebODM routes the plugin API through a plain Django view, so Django's
+    CSRF check refuses a POST, PATCH or DELETE without the session's token even with basic or JWT auth (CLAUDE.md
+    says so; the editor sends the token).
+  - Removed afterwards: the "Live check" boundaries, projects and tasks, user `livecheck2`, the downloads; no
+    "(Custom)" preset was made. The 3.3.2 stack was stopped. Docs: README requirements, CLAUDE.md, the skills,
+    `ruff.toml`, `requirements-dev.txt`.
 - **Release 1.1.1 (MapLibre 6)** — 2026-10-29, `maplibre-6` (46231a7) and `release/1.1.1` (11c1568) from `main`.
   Dependabot alert #1 (GHSA-jrc7-96c5-q579, XSS through attribution HTML in maplibre-gl <= 6.4.0): maplibre-gl
   6.16.0. `geojson/public/maplibre.mjs` imports the ES module and sets `window.maplibregl`; `editor.html` loads it as
