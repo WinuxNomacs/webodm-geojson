@@ -3,13 +3,25 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: 1.1.1 is published (Done: "Release 1.1.1"). Docs#11 was closed 2026-10-29: WebODM's
-developer documents #2043's hook himself. The unpushed rewrite, 003ea28 on `task-options-hooks` in
-`ignored/WebODM-Docs`, is unused.)
+- **WebODM 4.0.0** (the user, 2026-11-05: "WebODM released 4.0.0 and we need to make sure geojson plugin fully
+  supports the update"). 4.0.0 (tag `v4.0.0`, 2026-11-04, 42 commits after 3.3.2): Ubuntu 24.04, **Python 3.14,
+  Django 5.2, DRF 3.18**, Postgres 18 without PostGIS, Valkey in place of Redis, WebODM's own JWT auth, a vendored
+  tiler (`app.vendor.rio_tiler`), plugin URLs through `re_path`, rewritten Administration templates.
+  Read against the plugin: unchanged are `plugin_base.py`, `data_store.py`, `functions.py`, the plugin page
+  template `app/plugins/templates/base.html`, `Dashboard.js` (`presetDialogOptionsReady`), `app/tests/classes.py`;
+  `Basemap.get_cached_basemaps` and pyproj (3.8.0) are still there; `PluginDatum.json_value` moves from
+  `contrib.postgres`'s JSONField to `models.JSONField` (jsonb both); the tiler's `orthophoto/metadata` keeps
+  `statistics`, `percentiles`, `bounds.value`, `minzoom`/`maxzoom` (what `boundary_buttons.js` reads). The dev
+  stack changes: `docker-compose.nodeodm.yml` is `docker-compose.nodeodx.yml`, db image 18 (upgrades 9.5 data in
+  place, one way), the dev compose's venv in an anonymous volume a new image must not reuse.
+  Decided (the user, 2026-11-05): the plugin supports **both 3.3.2 and 4.0.0** (`webodmMinVersion` stays 3.3.2,
+  Python 3.9 code, tests on both stacks, as webodm-dji-thermal does); the :8001 dev data is **copied** to volumes
+  `webodm-geojson-332_*` for a 3.3.2 stack (:8004, `gj3-*`) and then **upgraded in place** by 4.0.0 on :8001; a
+  processed task's orthophoto in the editor (never checked live) is checked with a **public ODM sample dataset**
+  processed on the dev stacks. No release if `geojson/` needs no change (1.1.1 already installs on 4.0.0); else
+  1.1.2.
 
-(waiting, as of 2026-10-29, on
-- WebODM-Plugins#2 (the directory entry to 1.1.1, branch `geojson-1.1.1` from upstream `main`): open. #1 was
-  merged 2026-10-29 at 1.1.0 (675d9a8), so WebODM's plugin directory lists 1.1.0 until #2 merges.)
+(WebODM-Plugins#2, the directory entry to 1.1.1, was merged 2026-10-29.)
 
 **Later**
 (nothing planned)
