@@ -1,29 +1,36 @@
-# Added to WebODM's own docker-compose.yml, .nodeodm.yml and .dev.yml by dev/webodm.sh: the checkout in
-# ignored/WebODM runs in dev mode with this repo's plugin mounted as coreplugins/geojson, under its own
-# container names, port and volumes, so it can run beside another WebODM (whose names and port it would take).
-# The images are pinned by digest: `latest` is rebuilt from WebODM's master, and a local `latest` tag can be another
-# build (a fork's). Upgrading: pull the new images, update ignored/WebODM to the commit they were built from, move
-# the digests, `dev/webodm.sh up`, run the tests.
-x-webapp-image: &webapp-image webodm/webodm_webapp@sha256:55a1d7d1eee7c1220edfb75da2b67044ebcda1b6b61b25a369cc5c087bb47d71
+# Added to WebODM's own docker-compose.yml and .dev.yml by dev/webodm.sh: a WebODM checkout runs in dev mode with
+# this repo's plugin mounted as coreplugins/geojson, under its own container names (GJ_PREFIX), port and volumes, so
+# it can run beside another WebODM (whose names and port it would take). The images (GJ_*_IMAGE) are each version's,
+# pinned by digest in dev/webodm.sh. The processing node is defined here: WebODM's own file for it was renamed in
+# 4.0.0 (docker-compose.nodeodm.yml, then .nodeodx.yml).
 services:
   db:
-    image: webodm/webodm_db@sha256:03f18ec0089325ec2b8975ba1781277bcdc212b6d86c9de33f6409d313e90430
-    container_name: gj-db
+    image: ${GJ_DB_IMAGE}
+    container_name: ${GJ_PREFIX}-db
   broker:
-    container_name: gj-broker
+    image: ${GJ_BROKER_IMAGE}
+    container_name: ${GJ_PREFIX}-broker
   node-odx-1:
-    image: webodm/nodeodx@sha256:d75a3957076af0efbbbd03a6c6d753b29802b9f1715235b42c5d7154ba68fa55
-    container_name: gj-node-odx-1
+    image: ${GJ_NODE_IMAGE}
+    container_name: ${GJ_PREFIX}-node-odx-1
+    expose:
+      - "3000"
+    restart: unless-stopped
+    oom_score_adj: 500
   webapp:
-    image: *webapp-image
-    container_name: gj-webapp
+    image: ${GJ_WEBAPP_IMAGE}
+    container_name: ${GJ_PREFIX}-webapp
+    depends_on:
+      - node-odx-1
+    environment:
+      - WO_DEFAULT_NODES
     ports: !override
       - "${WO_PORT}:8000/tcp"
       - "${GJ_LIVERELOAD_PORT}:35729"
     volumes:
       - ${GJ_PLUGIN_DIR}:/webodm/coreplugins/geojson
   worker:
-    image: *webapp-image
-    container_name: gj-worker
+    image: ${GJ_WEBAPP_IMAGE}
+    container_name: ${GJ_PREFIX}-worker
     volumes:
       - ${GJ_PLUGIN_DIR}:/webodm/coreplugins/geojson

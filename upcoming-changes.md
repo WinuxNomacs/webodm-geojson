@@ -3,18 +3,45 @@
 ## Phases (current and upcoming)
 
 **Up next**
-(nothing to build: 1.1.1 is published (Done: "Release 1.1.1"). Docs#11 was closed 2026-10-29: WebODM's
-developer documents #2043's hook himself. The unpushed rewrite, 003ea28 on `task-options-hooks` in
-`ignored/WebODM-Docs`, is unused.)
+(nothing to build.)
 
-(waiting, as of 2026-10-29, on
-- WebODM-Plugins#2 (the directory entry to 1.1.1, branch `geojson-1.1.1` from upstream `main`): open. #1 was
-  merged 2026-10-29 at 1.1.0 (675d9a8), so WebODM's plugin directory lists 1.1.0 until #2 merges.)
+(WebODM-Plugins#2, the directory entry to 1.1.1, was merged 2026-10-29.)
 
 **Later**
 (nothing planned)
 
 **Done**
+- **WebODM 4.0.0** — 2026-11-05, `webodm-4.0.0` from `main` (the user: "WebODM released 4.0.0 and we need to make
+  sure geojson plugin fully supports the update"). 4.0.0 (tag `v4.0.0`, 2026-11-04): Python 3.14, Django 5.2,
+  DRF 3.18, Postgres 18 without PostGIS, Valkey, WebODM's own JWT auth, a vendored tiler, plugin URLs through
+  `re_path`, rewritten Administration templates. **No change to `geojson/` was needed, so no release**: 1.1.1
+  (`webodmMinVersion` 3.3.2) installs and works on 4.0.0. Decided (the user, 2026-11-05): both 3.3.2 and 4.0.0
+  supported; the dev data copied, then upgraded; a processed task checked with a public sample.
+  - Dev stack: `dev/webodm.sh` runs 4.0.0 (`ignored/WebODM` at `v4.0.0`, :8001, `gj-*`) or, with
+    `GJ_WEBODM=3.3.2`, 3.3.2 (the worktree `ignored/WebODM-3.3.2`, :8004, `gj3-*`, project `webodm-geojson-332`),
+    images pinned by digest per version (checked against Docker Hub's `4.0.0`, `18`, `9.1-alpine` and nodeodx
+    `latest` tags); the node is defined in `dev/compose.yml` (WebODM renamed its node file); `up` renews the
+    anonymous volumes (the image's venv). The :8001 volumes were copied to `webodm-geojson-332_*` first; 4.0.0's
+    first start upgraded them from Postgres 9.5 to 18 (the 9.5 data kept as `backup-9.5` in the volume) and ran
+    the migrations: the library (Home, Fremd: ids, owners, areas, dates) is the same on both.
+  - Tests: Ruff, ESLint, Jest 124; Django `test_geojson` and `app.tests.test_plugins` (35) pass on 4.0.0 and on
+    3.3.2. On 3.3.2 the first run after the stack's first start had 1 failure whose output was not kept; the next
+    3 full runs and 5 runs of `test_geojson` passed.
+  - Live, on both: the library (search, open, draw a rectangle, edit the text, import, a line refused, search
+    suggestions, basemap tiles), a second user (owner note, Delete disabled, DELETE 403, Save copy); Task Options
+    on a new task (24 photos of `OpenDroneMap/odm_data_aukerman` on the editor's map from EXIF, the buttons once
+    beside `boundary`, "Use for this task" filled it, the task created with it, Fast Orthophoto) and on that task
+    processed (orthophoto metadata and tiles 200, shots read, the editor starting from the task's boundary, Escape
+    closing only the editor). First live check of a processed task's orthophoto (also on 3.3.2).
+  - Installed as users do on 4.0.0: GeoJSON 1.1.1 from Administration > Plugins > Install Plugins (WebODM's
+    directory), "installed successfully", files identical to the release zip, npm installed maplibre-gl 6.16.0;
+    the live check passed on it; removed with the row's delete button, `geojson/` mounted again.
+  - Found, in both versions (not new): WebODM routes the plugin API through a plain Django view, so Django's
+    CSRF check refuses a POST, PATCH or DELETE without the session's token even with basic or JWT auth (CLAUDE.md
+    says so; the editor sends the token).
+  - Removed afterwards: the "Live check" boundaries, projects and tasks, user `livecheck2`, the downloads; no
+    "(Custom)" preset was made. The 3.3.2 stack was stopped. Docs: README requirements, CLAUDE.md, the skills,
+    `ruff.toml`, `requirements-dev.txt`.
 - **Release 1.1.1 (MapLibre 6)** — 2026-10-29, `maplibre-6` (46231a7) and `release/1.1.1` (11c1568) from `main`.
   Dependabot alert #1 (GHSA-jrc7-96c5-q579, XSS through attribution HTML in maplibre-gl <= 6.4.0): maplibre-gl
   6.16.0. `geojson/public/maplibre.mjs` imports the ES module and sets `window.maplibregl`; `editor.html` loads it as
